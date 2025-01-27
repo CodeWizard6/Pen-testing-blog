@@ -1,10 +1,16 @@
 # main links
 main:
-  - title: "HTB walkthroughs - Web app"
-    url: ""
-  - title: "HTB walkthroughs - Active Directory (AD)"
-    url: ""
+  - title: "Asset Categories"
+    children:
+      - title: "Web applications"
+        url: ""
+      - title: "Windows Active Directory - AD"
+        url: ""
+
+
   - title: "Other pen testing topics"
     url: ""
+
+
   - title: "Resume"
     url: ""
