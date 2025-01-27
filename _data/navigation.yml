@@ -1,10 +1,10 @@
 # main links
 main:
-  - title: "Hack the Box Walkthroughs - Web applications"
+  - title: "HTB walkthroughs - Web app"
     url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
-  - title: "Hack the Box Walkthroughs - Active Directory"
+  - title: "HTB walkthroughs - Active Directory"
     url: https://mmistakes.github.io/minimal-mistakes/about/
-  - title: "Other pen testing subjects"
+  - title: "Other pen testing topics"
     url: /year-archive/
   - title: "Resume"
     url: /collection-archive/
