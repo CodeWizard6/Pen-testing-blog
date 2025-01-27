@@ -1,10 +1,19 @@
 # main links
 main:
   - title: "HTB walkthroughs - Web app"
-    url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
+    url: ""
   - title: "HTB walkthroughs - Active Directory"
-    url: https://mmistakes.github.io/minimal-mistakes/about/
+    url: ""
   - title: "Other pen testing topics"
-    url: /year-archive/
+    url: ""
   - title: "Resume"
-    url: /collection-archive/
+    url: ""
+side:
+   - title: "HTB walkthroughs - Web app"
+     url: ""
+  -  title: "HTB walkthroughs - Active Directory"
+     url: ""
+  -  title: "Other pen testing topics"
+     url: ""
+  -  title: "Resume"
+     url: ""
