@@ -8,12 +8,3 @@ main:
     url: ""
   - title: "Resume"
     url: ""
-side:
-   - title: "HTB walkthroughs - Web app"
-     url: ""
-  -  title: "HTB walkthroughs - Active Directory"
-     url: ""
-  -  title: "Other pen testing topics"
-     url: ""
-  -  title: "Resume"
-     url: ""
