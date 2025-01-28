@@ -7,7 +7,7 @@ main:
       - title: "Windows Active Directory - AD"
         url: ""
 
-   - title: "Vulnerability Category"
+  - title: "Vulnerability Category"
      children:
       - title: "Server side request forgery"
         url: ""
