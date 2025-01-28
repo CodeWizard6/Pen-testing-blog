@@ -19,12 +19,5 @@ main:
         url: ""
       - title: "Security misconfiguration - AD certificates"
         url: ""
-      - title: "Weak passwords and passwords reuse	`"
+      - title: "Weak passwords and passwords reuse"
         url: ""
-
-  - title: "Other pen testing topics"
-    url: ""
-
-
-  - title: "Resume"
-    url: ""
