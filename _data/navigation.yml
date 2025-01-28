@@ -1,12 +1,26 @@
 # main links
 main:
-  - title: "Asset Categories"
+  - title: "Asset Category"
     children:
       - title: "Web applications"
         url: ""
       - title: "Windows Active Directory - AD"
         url: ""
 
+   - title: "Vulnerability Category"
+     children:
+      - title: "Server side request forgery"
+        url: ""
+      - title: "Unrestricted file uploads"
+        url: ""
+      - title: "Least privilege violation"
+        url: ""
+      - title: "Security misconfiguration - Kerberos"
+        url: ""
+      - title: "Security misconfiguration - AD certificates"
+        url: ""
+      - title: "Weak passwords and passwords reuse	`"
+        url: ""
 
   - title: "Other pen testing topics"
     url: ""
