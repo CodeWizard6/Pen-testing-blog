@@ -4,7 +4,7 @@
 # documentation.
 
 # Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Deploy Jekyll site to Pages
+name: Deploy Jekyll site to Pages-QA-test environment
 
 on:
   workflow_dispatch:
@@ -51,7 +51,7 @@ jobs:
   deploy:
     environment:
       name: QA-test
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: https://QA-test.codewizard6.github.io/Pen-testing-blog/
     runs-on: ubuntu-latest
     needs: build
     steps:
