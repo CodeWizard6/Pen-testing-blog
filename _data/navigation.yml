@@ -1,12 +1,38 @@
 # main links
-main:
-  - title: "Quick-Start Guide"
-    url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
-  # - title: "About"
-  #   url: https://mmistakes.github.io/minimal-mistakes/about/
-  # - title: "Sample Posts"
-  #   url: /year-archive/
-  # - title: "Sample Collections"
-  #   url: /collection-archive/
-  # - title: "Sitemap"
-  #   url: /sitemap/
+sidebar:
+  - title: Individual Walkthroughs
+    children:
+      - title: "Devel"
+        url: ""
+      - title: "Devvortex"
+        url: ""
+      - title: "Escape"
+        url: ""
+      - title: "Love"
+        url: ""
+      - title: "Manager"
+        url: ""
+      - title: "Return"
+        url: ""
+      - title: "Sauna"
+        url: ""
+
+  - title: Walkthroughs by Asset Type
+    children:
+      - title: "Web Applications"
+        url: ""
+      - title: "Active Directory"
+        url: ""
+      
+  - title: Walkthroughs by Vulnerability Type
+    children:
+      - title: "Server side request forgery"
+        url: ""
+      - title: "Uncontrolled file upload"
+        url: ""
+      - title: "Use of vulnerable components"
+        url: 
+      - title: "Security misconfiguration - Kerberos"
+        url: ""
+      - title: "Security misconfiguration - Certificates
+        url: ""
