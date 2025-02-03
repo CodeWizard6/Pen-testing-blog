@@ -115,7 +115,7 @@ analytics:
 # Site Author
 author:
   name             : "Liwei Zhou"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "/assets/images/Headshot.png"
   bio              : "Cyberengineer with love for all things pen testing"
   location         : "United States"
   email            :
