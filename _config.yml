@@ -22,9 +22,9 @@ title_separator          : "-"
 subtitle                 : A collection of HackTheBox walkthroughs and other pen testing topics
 name                     : "Liwei Zhou"
 description              : "A collection of HackTheBox walkthroughs and other pen testing topics"
-url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : "https://codewizard6.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
-repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
+repository               : "codewizard6/Pen-testing-blog"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
@@ -96,9 +96,6 @@ facebook:
   app_id                 :
   publisher              :
 
-
-
-
 og_image                 : # Open Graph/Twitter default site image
 # For specifying social profiles
 # - https://developers.google.com/structured-data/customize/social-profiles
@@ -118,7 +115,7 @@ analytics:
 # Site Author
 author:
   name             : "Liwei Zhou"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "/assets/images/Headshot.png"
   bio              : "Cyberengineer with love for all things pen testing"
   location         : "United States"
   email            : "Liwei.zhou@yahoo.com"
