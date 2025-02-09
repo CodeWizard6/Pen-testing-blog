@@ -59,7 +59,14 @@
     font-family: $sans-serif;
     font-size: $type-size-6;
     line-height: 1.5;
-    > a {
+  }
+
+  li > a {
+    font-size: $type-size-6;
+    &:hover {
+      color:$rss-color;
+      text-decoration:underline;
+    }
   }
 
   img {
