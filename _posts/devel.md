@@ -1,12 +1,13 @@
 ---
-title: Hack the Box — Devel — Walkthrough
-description: 
+title: Devel
 date: '2024-05-29T11:33:22.318Z'
 keywords: []
+classes: wide
 tags: 
-   Uncontrolled-file-upload
-   Missing-security-patches
+  - Uncontrolled-file-upload
+  - Missing-security-patches
 ---
+
 # Walkthrough - Devel
 
 ![Devel machine exploitation matrix](/assets/images/1__E89__CXQXg__HC3aRCjl7LDw.png)

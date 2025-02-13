@@ -3,7 +3,7 @@ sidebar:
   - title: Individual Walkthroughs
     children:
       - title: "Devel"
-        url: "/posts/devel"
+        url: "/devel"
       - title: "Devvortex"
         url: ""
       - title: "Escape"
