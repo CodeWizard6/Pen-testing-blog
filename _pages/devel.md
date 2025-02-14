@@ -1,12 +1,15 @@
 ---
+layout: single
+classes: wide
 title: 'Devel-Walkthrough'
 date: '2024-05-29T11:33:22.318Z'
 keywords: []
-classes: wide
 tags: 
   - Identification-and-authentication-failures
   - Uncontrolled-file-upload
   - Missing-security-patches
+sidebar:
+  nav: "sidebar"
 ---
 
 ## Walkthrough - Devel
