@@ -10,6 +10,7 @@ tags:
   - Missing-security-patches
 sidebar:
   nav: "sidebar"
+permalink: /Devel/
 ---
 
 ## Walkthrough - Devel
