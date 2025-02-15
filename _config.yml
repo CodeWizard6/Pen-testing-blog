@@ -23,7 +23,7 @@ subtitle                 : A collection of HackTheBox walkthroughs and other pen
 name                     : "Liwei Zhou"
 description              : "A collection of HackTheBox walkthroughs and other pen testing topics"
 url                      : "https://codewizard6.github.io"
-baseurl                  : # the subpath of your site, e.g. "/blog"
+baseurl                  : "/Pen-testing-blog"
 repository               : "codewizard6/Pen-testing-blog"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
