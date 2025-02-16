@@ -110,23 +110,41 @@ I run the one-line code to compile the exploit executable in the same directory 
 
 ![Compiled vulnerability executable](/Pen-testing-blog/assets/images/1__hcp__TtfkzlQCHzhd9xweHA.png "Figure 10 - Compiled vulnerability exploit into executable program")
 
-### Executing vulneraiblity exploit on victim machine to escalate access privileges to ROOT user
+### Executing exploit on victim machine to escalate access privileges to ROOT user
 
 The final step is to transfer the malicious payload from my Kali Linux machine to the victim’s machine and execute it there, for which I will use the **Impacket smbserver.py** script from the Impacket scripts bundle. I create a directory that will be shared with the victim (share) and copy the exploit executable to this directory. Upon the victim (Devel) successfully authenticating to my malicious SMB share, the exploit executes, giving me root as **NT authority\\system.**
 
 ![Successful incoming connection to SMB file share by victim computer](/Pen-testing-blog/assets/images/1__Z54iWr4b0zMGwf5jTQmzDw.png "Figure 11 - Successful catching of reverse shell connection from victim computer to my Kali Linux machine")
+
 ![Successful CVE-2011-1249 exploitaition leading to ROOT user privileges](/Pen-testing-blog/assets/images/1__iGGcd78yopUMBy8yb3KFNw.png "Figure 12 - Successful elevation of privilges to ROOT user via exploitation of CVE-2011-1249 vulnerability")
 
-## Vulnerability summary
+## Vulnerability exploitation and mitigation summary
 
-The machine demonstrated the following vulnerabilities:
+The machine demonstrated the following vulnerabilities and how they can be exploited. I've also included some security controls that can mitigate exploitation:
 
-* **Arbitrary file upload -** Vulnerability allows a malicious user to upload dangerous file types directly to a web server. In this example, as a result of the web server not validating the file extensions and content of files uploaded, I was able to upload a malicious ASPX file containing a reverse shell payload allowing me to gain unauthorized access on the web server for initial foothold.
+### **Uncontrolled file upload**
 
-* **Security misconfiguration —** Vulnerability due to insecure settings allows malicious actors to take malicious actions. In this example, there are two misconfigurations that allowed compromise:
+Vulnerability allows a malicious user to upload dangerous file types such as executables directly to a web server. In this example, as a result of the web server not validating the file extensions and content of files uploaded, I was able to upload a malicious ASPX file containing a reverse shell payload allowing me to gain unauthorized access on the web server for initial foothold.
 
-  * FTP configured to allow ANONYMOUS authentication with PUT (write) privileges to the same root directory as the web server
+Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
 
-  * Execute privileges being enabled on the web server root directory where arbitrary files are uploaded.
+* Remove EXECUTE permissions from the upload destination directory on web server or uploading the files to a location outside the web root.
+* Strictly limit the file length and size of uploaded files.
+* Use a combination of methods such as file MIME type validation and file content validation to detect dangerous file types. Do not rely on the file extension or CONTENT-Type header as these values are easily spoofed.
 
-* **Missing security patches —** As a result of missing hotfix patches, I was able to use a publicly released vulnerability exploit to escalate my access to root user upon gaining initial foothold on machine
+### **Security misconfiguration**
+
+Misconfigured or insecurely configured web server settings allows malicious actors to take malicious actions. As a result of ANONYMOUS login with WRITE access being enabled on the FTP server, I was able to abuse this function to upload a malicious reverse shell payload despite not being not authenticated to the FTP server
+
+Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
+
+* Disable ANONYMOUS access to FTP servers as unauthenticated users should not be permitted to read or write to file shares.
+
+### **Missing security patches**
+
+As a result of missing hotfix patches, I was able to use a publicly released vulnerability exploit to escalate my access to root user upon gaining initial foothold on machine.
+
+Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
+
+* Always keep systems updated with the latest security patches.
+* If business constraints do not allow vulnerable systems to be patched, compensating security controls such as limiting vulnerable systems access to the Internet, should be implemented to reduce the attack surface and vectors.
