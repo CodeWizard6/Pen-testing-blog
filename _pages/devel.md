@@ -1,19 +1,22 @@
 ---
 layout: single
 classes: wide
-title: 'Devel-Walkthrough'
+title: 'Devel Machine Walkthrough'
 date: '2024-05-29T11:33:22.318Z'
 keywords: []
 tags: 
-  - Identification-and-authentication-failures
+  - Security miscofiguration
   - Uncontrolled-file-upload
   - Missing-security-patches
+categories:
+  - Web applications
+  - Active Directory
 sidebar:
   nav: "sidebar"
 permalink: /Devel/
 ---
 
-## Walkthrough - Devel
+## Machine Summary
 
 ![Devel machine exploitation matrix](/Pen-testing-blog/assets/images/1__E89__CXQXg__HC3aRCjl7LDw.png "Figure 1 -Devel machine exploitation matrix")
 
@@ -142,9 +145,9 @@ Security best practices and controls that can block and / or mitigate the effect
 
 ### **Missing security patches**
 
-As a result of missing hotfix patches, I was able to use a publicly released vulnerability exploit to escalate my access to root user upon gaining initial foothold on machine.
+As a result of missing security patches, I was able to use a publicly released vulnerability exploit to escalate my access to root user upon gaining initial foothold on machine.
 
 Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
 
 * Always keep systems updated with the latest security patches.
-* If business constraints do not allow vulnerable systems to be patched, compensating security controls such as limiting vulnerable systems access to the Internet, should be implemented to reduce the attack surface and vectors.
+* If business constraints do not allow vulnerable systems to be patched, compensating security controls such as limiting vulnerable systems access to the Internet, should be implemented to reduce the attack surface and vectors. The risk vs benefit calculation for whether the patching decision should be deferred should be guided by a security risk analysis.
