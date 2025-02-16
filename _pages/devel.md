@@ -10,7 +10,8 @@ tags:
   - Missing-security-patches
 categories:
   - Web applications
-  - Active Directory
+toc: true
+toc_label: "Table of Contents"
 sidebar:
   nav: "sidebar"
 permalink: /Devel/
@@ -18,11 +19,11 @@ permalink: /Devel/
 
 ## Machine Summary
 
-![Devel machine exploitation matrix](/Pen-testing-blog/assets/images/1__E89__CXQXg__HC3aRCjl7LDw.png "Figure 1 -Devel machine exploitation matrix")
-
 Devel is a relatively straightforward machine running the Microsoft Windows OS that shows how weak authentication to file servers, uncontrolled file uploads and missing security patches, combined, can lead to the complete compromise of a web application.  As a result the file transfer protocol (FTP) server allowing ANONYMOUS access, I was able to login to the FTP server without credentials.  As a result of the IIS web server not restricting what file types can be uploaded to it, I was able to upload and execute a malicious ASPX file containing a reverse shell payload on the victim machine to gain a foothold as a low privileged, non-administrative user. As a result of missing security patches, a kernel vulnerability that leads to privilege escalation was exploited to give me root user as **NT Authority\\System.**
 
 In the last section, I've included a summary of all the vulnerabilities found on this machine and security controls to mitigate exploitation.
+
+![Devel machine exploitation matrix](/Pen-testing-blog/assets/images/1__E89__CXQXg__HC3aRCjl7LDw.png "Figure 1 -Devel machine exploitation matrix")
 
 ## Step 1 — Enumeration
 
@@ -121,7 +122,7 @@ The final step is to transfer the malicious payload from my Kali Linux machine t
 
 ![Successful CVE-2011-1249 exploitaition leading to ROOT user privileges](/Pen-testing-blog/assets/images/1__iGGcd78yopUMBy8yb3KFNw.png "Figure 12 - Successful elevation of privilges to ROOT user via exploitation of CVE-2011-1249 vulnerability")
 
-## Vulnerability exploitation and mitigation summary
+## Vulnerabilities - Exploitation and mitigation summary
 
 The machine demonstrated the following vulnerabilities and how they can be exploited. I've also included some security controls that can mitigate exploitation:
 

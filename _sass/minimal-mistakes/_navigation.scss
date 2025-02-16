@@ -512,8 +512,9 @@
 
   .nav__title {
     color: #fff;
-    font-size: $type-size-6;
-    background: $primary-color;
+    text-align: center;
+    font-size: $type-size-5;
+    background: $tumblr-color;
     border-start-start-radius: $border-radius;
     border-start-end-radius: $border-radius;
   }
@@ -544,17 +545,20 @@
     border-bottom: 1px solid $border-color;
 
     &:hover {
-      color: $text-color;
+      color: $rss-color;
     }
   }
 
-  li ul > li a {
+  li ul > li > a {
     padding-inline-start: 1.25rem;
+    font-size: $type-size-3;
     font-weight: normal;
   }
 
-  li ul li ul > li a {
-    padding-inline-start: 1.75rem;
+  li ul li ul > li > a {
+    padding-inline-start: 5.00rem;
+    font-size: $type-size-3;
+    font-weight: normal;
   }
 
   li ul li ul li ul > li a {
