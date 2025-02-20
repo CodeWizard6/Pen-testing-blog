@@ -134,9 +134,9 @@ curl http://dev.devvortex.htb/api/index.php/v1/users?public=true | jq
 curl http://dev.devvortex.htb/api/index.php/v1/config/application?public=true| jq
 ```
 
-![Exploit of CVE-2023-23752 successful - Returned user IDs](/Pen-testing-blog/assets/images/1__Tha8rbei865gXmhHZYyazA.jpeg "Figure 12 - Exploit of CVE-2023-23752 successful - returned user IDs")
+![Exploit of CVE-2023-23752 successful - user IDs](/Pen-testing-blog/assets/images/1__Tha8rbei865gXmhHZYyazA.jpeg "Figure 12 - Exploit of CVE-2023-23752 successful - returned user IDs")
 
-![Exploit of CVE-2023-23752 successful - Returned MySQL DB passwords](/Pen-testing-blog/assets/images/1__7PKX7DAZib2bRXedB__6RMw.jpeg "Figure 13 - Exploit of CVE-2023-23752 successful - returned My SQL DB passwords")
+![Exploit of CVE-2023-23752 successful - user IDs](/Pen-testing-blog/assets/images/1__Tha8rbei865gXmhHZYyazA.jpeg "Figure 13 - Exploit of CVE-2023-23752 successful - returned user IDs")
 
 The exploit was successful and revealed two users — lewis and logan with lewis having elevated access privileges as a super user along with the plaintext password for lewis.
 
@@ -164,11 +164,11 @@ In my Kali Linux terminal, I set up my net cat listener to listen for connection
 
 ![Successful reverse shell connection from victim computer](/Pen-testing-blog/assets/images/1__9wGk60t7Rwsk0HLBkwCwGw.jpeg "Figure 17 - Successful reverse shell connection from victim computer to my Kali Linux machine")
 
-### Step 3 — Lateral movement — www-data -> Logan
+## Step 3 — Lateral movement — www-data -> Logan
 
 After obtaining an initial foothold on the victim's machine via compromise of the user account "lewis", I further explore the system to see if I can expand my footprint and compromise more resources on the system. As I know the backend database is MySQL, I start there.
 
-#### Obtaining password hash of the user Logan in MySQl database
+### Obtaining password hash of the user Logan in MySQl database
 
 I try to use the credentials of the user **lewis** to login to backend MySQL DB as the password could have been reused and was successfully able to login.
 
@@ -190,7 +190,7 @@ SELECT name, username , password FROM sd4fg\_users;
 
 ![](/Pen-testing-blog/assets/images/1__TF0NYbYCpXaFLt__wdsBkTw.jpeg)
 
-#### Cracking the password hash of user logan using hashcat
+### Cracking the password hash of user logan using hashcat
 
 Using hashcat in dictionary or straight attack mode with a hash format of bcrypt , I cracked the password hash and obtained the plain text password for user **logan — tequieromucho.** Explanation of hashcat command syntax I used:
 
@@ -205,7 +205,7 @@ hashcat -a 0 -m 3200 '$2y$10$IT4k5kmSGvHS09d6M/1w0eYiB5Ne9XzArQRFJTGThNiy/yBtkIj
 ![](/Pen-testing-blog/assets/images/1__i1JHgis1EWShiS7y9fFy8g.jpeg)
 ![](/Pen-testing-blog/assets/images/1__dIZPuSSCmKwNeYLky__N6IA.jpeg)
 
-#### Logging in as user logan via secure shell — SSH
+### Logging in as user logan via secure shell — SSH
 
 The initial enumeration via nmap revealed a SSH server running on port 22. Now I have credentials for user logan, I will attempt to login as him via secure shell — SSH. I successfully login via SSH as user logan.
 
@@ -213,13 +213,13 @@ ssh <logan@devvortex.htb> -p 22
 
 ![](/Pen-testing-blog/assets/images/1__WjgIdhqOrvTHpriNExrl1w.jpeg)
 
-### Step 4 — Privilege escalation — Logan -> Root
+## Step 4 — Privilege escalation — Logan -> Root
 
 I first find out what commands the user logan can run as the root user via sudo command. The user logan is able to run **usr/bin/apport-cli** used to report application bugs to developers and the version of apport-cli running is **2.20.11** which is susceptible to privileged escalation vulnerability [**CVE-2023–1326**](https://nvd.nist.gov/vuln/detail/CVE-2023-1326) due to the default pager of **less** being chosen when apport-cli is run as root user via sudo and that less allows running of commands via pre-pending via !.
 
 ![](/Pen-testing-blog/assets/images/1__HgZoXvkyEN__MPoBwOIEWkw.jpeg)
 
-#### Exploitation of CVE-2023–1326 via fictious bug report creation
+### Exploitation of CVE-2023–1326 via fictious bug report creation
 
 To create a bug report , I run apport-cli with the -f or — file-bug flag set. After the report is created, select **option v** to view the report and you should now be in the less pager. Finally, type in **!/bin/bash** to be dropped into an escalated bash script as root.
 
