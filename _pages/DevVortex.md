@@ -162,7 +162,7 @@ In my Kali Linux terminal, I set up my net cat listener to listen for connection
 
 ![Execution of malicious payload in browser](/Pen-testing-blog/assets/images/1__pWU8JJWNCbokOagLmu7JVg.png "Figure 16 - Execution of malicious reverse shell payload in the browser")
 
-![Successful reverse shell connection from victim computer](/Pen-testing-blog/assets/images/1__9wGk60t7Rwsk0HLBkwCwGw.png "Figure 17 - Successful reverse shell connection from victim computer to my Kali Linux machine")
+![Successful reverse shell connection from victim computer](/Pen-testing-blog/assets/images/CatchReverseShell.png  "Figure 17 - Successful reverse shell connection from victim computer to my Kali Linux machine")
 
 ## Step 3 — Lateral movement — www-data -> Logan
 
@@ -176,11 +176,11 @@ I try to use the credentials of the user **lewis** to login to backend MySQL DB 
 mysql -u lewis -p
 ```
 
-![Successful login to MySQL DB as user lewis](/Pen-testing-blog/assets/images/1__IouCSc3sJ__aZdWFFGQ__Uhg.png "Figure 18 - Successful login to SQL DB as user lewis")
+![Successful login to MySQL DB as user lewis](/Pen-testing-blog/assets/images/SuccessfulLoginDBLewis.png "Figure 18 - Successful login to SQL DB as user lewis")
 
 I enumerate the only non-default database present, Joomla, along with all its tables. The table **sd4fg_users** seemed interesting. I further enumerate this table via the MySQL command **describe table** (or describe or desc) to see what fields are present. The fields **name, username, and password** immediately stand out.
 
-![Database table _users enumeration results](/Pen-testing-blog/assets/images/1__uMsFpI5cmwmrXdLFb3cC6Q.png "Figure 19 - DB table sd4fg_users schema")
+![Database table _users enumeration results](/Pen-testing-blog/assets/images/EnumerationTableSd4fgUsers.png "Figure 19 - DB table sd4fg_users schema")
 
 After running a simple SELECT command on the aformentioned three fields, I obtain the password hash of the user **logan**.
 
@@ -188,7 +188,7 @@ After running a simple SELECT command on the aformentioned three fields, I obtai
 SELECT name, username , password FROM sd4fg\_users;
 ```
 
-![](/Pen-testing-blog/assets/images/1__TF0NYbYCpXaFLt__wdsBkTw.png)
+![Obtained password hash of user Logan](/Pen-testing-blog/assets/images/HashedPasswordLogan.png "Figure 20 - Obtained hashed password of user logan")
 
 ### Cracking the password hash of user logan using hashcat
 
@@ -200,10 +200,13 @@ Using hashcat in dictionary or straight attack mode with a hash format of bcrypt
 * Specify path on local machine to word list (Here I used well known list of rockyou.txt that comes preinstalled with Kali Linux)
 * \-o specify the output file name containing the plain text password after being cracked (optional)
 
+```bash
 hashcat -a 0 -m 3200 '$2y$10$IT4k5kmSGvHS09d6M/1w0eYiB5Ne9XzArQRFJTGThNiy/yBtkIj12' /usr/share/wordlists/rockyou.txt -o crackedhashes.txt
+```
 
-![](/Pen-testing-blog/assets/images/1__i1JHgis1EWShiS7y9fFy8g.png)
-![](/Pen-testing-blog/assets/images/1__dIZPuSSCmKwNeYLky__N6IA.png)
+![Input for cracking password hash for user logan](/Pen-testing-blog/assets/images/CrackingPasswordHashLogan.png "Figure 21 - Command line input for cracking password hash for user logan using HashCat program")
+
+![Cracked hash for user logan](/Pen-testing-blog/assets/images/CrackedPasswordHashLogan.png "Figure 22 - Cracked hash for user logan")
 
 ### Logging in as user logan via secure shell — SSH
 
@@ -211,13 +214,13 @@ The initial enumeration via nmap revealed a SSH server running on port 22. Now I
 
 ssh <logan@devvortex.htb> -p 22
 
-![](/Pen-testing-blog/assets/images/1__WjgIdhqOrvTHpriNExrl1w.png)
+![Successful SSH login as user logan](/Pen-testing-blog/assets/images/SuccessfulLoginSSHLogan.png "Figure 23 - Successful SSH login as user logan")
 
 ## Step 4 — Privilege escalation — Logan -> Root
 
 I first find out what commands the user logan can run as the root user via sudo command. The user logan is able to run **usr/bin/apport-cli** used to report application bugs to developers and the version of apport-cli running is **2.20.11** which is susceptible to privileged escalation vulnerability [**CVE-2023–1326**](https://nvd.nist.gov/vuln/detail/CVE-2023-1326) due to the default pager of **less** being chosen when apport-cli is run as root user via sudo and that less allows running of commands via pre-pending via !.
 
-![](/Pen-testing-blog/assets/images/1__HgZoXvkyEN__MPoBwOIEWkw.png)
+![User logan able to run ApportCLI program](/Pen-testing-blog/assets/images/UserLoganrunApportCLI.png "Figure 24 - User logan able to run ApportCLI bug reporting program")
 
 ### Exploitation of CVE-2023–1326 via fictious bug report creation
 
@@ -225,5 +228,6 @@ To create a bug report , I run apport-cli with the -f or — file-bug flag 
 
 sudo usr/bin/apport-cli --file-bug
 
-![](/Pen-testing-blog/assets/images/1__B9P0w0490bP0eQAmE4rEXw.png)
-![](/Pen-testing-blog/assets/images/1__9VSZFXgS1txlyzC9N6THNQ.png)
+![Filing fake bug report to escalate privileges to root user](/Pen-testing-blog/assets/images/FileFakeBugReportPrivilegeEscalation.png "Figure 25 - Filing a fake bug report to exploit vulnerability CVE-2023-1326 for privilege escalation")
+
+![Successful exploitation of vulnerability CVE-2023-1326](/Pen-testing-blog/assets/images/ExploitationCVE20231326RootUser.png "Figure 26 - Successful exploitation of vulnerability CVE-2023-1326 to escalated access privileges to ROOT user")
