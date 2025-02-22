@@ -255,11 +255,11 @@ The reuse of the same password in different web application componenets increase
 Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
 
 * Avoid using the same password on more than one component of an application such as administration interface login or the backend databases.
-* If passwords are suspected to have been compromised, they should be changed immediately
+* If passwords are suspected to have been compromised, they should be changed immediately.
 
 ### Broken access control
 
-If access control is not implemented properly such as allowing basic users to certain commands with SUDO, malicious actors could abuse functionality to escalate their privileges, potentially to ROOT user. In this machine, a non - privileged user of logan was able to run sudo apport - CLI command to exploit CVE-2023-1326 to escalate their access privileges to the ROOT user.
+If access control is not implemented properly such as allowing basic users to issue certain commands with SUDO, malicious actors could abuse functionality to escalate their privileges, potentially to ROOT user. In this machine, the non - privileged user of logan was able to run sudo apport - CLI command to exploit CVE-2023-1326 to escalate their access privileges to the ROOT user.
 
 Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
 
