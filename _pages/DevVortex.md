@@ -212,7 +212,9 @@ hashcat -a 0 -m 3200 '$2y$10$IT4k5kmSGvHS09d6M/1w0eYiB5Ne9XzArQRFJTGThNiy/yBtkIj
 
 The initial enumeration via nmap revealed a SSH server running on port 22. Now I have credentials for user logan, I will attempt to login as him via secure shell — SSH. I successfully login via SSH as user logan.
 
+```bash
 ssh <logan@devvortex.htb> -p 22
+```
 
 ![Successful SSH login as user logan](/Pen-testing-blog/assets/images/SuccessfulLoginSSHLogan.png "Figure 23 - Successful SSH login as user logan")
 
