@@ -5,6 +5,7 @@ keywords: []
 tags: 
   - Outdated-and-vulnerable-components
   - Identification-and-authentication-failures
+  - Broken access control
   - Injection
 categories:
   - Web applications
@@ -233,3 +234,33 @@ sudo usr/bin/apport-cli --file-bug
 ![Filing fake bug report to escalate privileges to root user](/Pen-testing-blog/assets/images/FileFakeBugReportPrivilegeEscalation.png "Figure 25 - Filing a fake bug report to exploit vulnerability CVE-2023-1326 for privilege escalation")
 
 ![Successful exploitation of vulnerability CVE-2023-1326](/Pen-testing-blog/assets/images/ExploitationCVE20231326RootUser.png "Figure 26 - Successful exploitation of vulnerability CVE-2023-1326 to escalated access privileges to ROOT user")
+
+## Vulnerabilities - Exploitation and mitigation summary
+
+The machine demonstrated the following vulnerabilities and how they can be exploited. I've also included some security controls that can mitigate exploitation:
+
+### Use of outdated and vulnerable components
+
+The use of components such as outdated versions of software libraries or vulnerable versions of content management systems (CMS) can result in vulnerabilities that can be exploited by threat actors. In this machine, as a result of using Joomla! version 4.2.6 susceptible to unauthenticated information disclosure vulnerability CVE-2023-23752, I was able to obtain the user IDs and passwords of all users on the system without authentication or authorization.
+
+Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
+
+* Always keep the web application and all of its dependency components up to date. Vendors often release security patches in newer version of their software that remediate known vulnerabilities in older software versions.
+* If business or technical contraints prevent upgrading to newer , secure software versions, implement security controls such as limiting access, segregating applications on the network, or additional hardening so to mitigate impact in case of compromise by threat actors.
+
+### Identication and authentication failures - Password reuse
+
+The reuse of the same password in different web application componenets increases the attack surface as a threat actor can laterally move from asset to asset with a single stolen password. In this machine, the password of the user lewis was used on both the Joomla! administration page and the MySQL database. I was able to compromise both assets with a single stolen password
+
+Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
+
+* Avoid using the same password on more than one component of an application such as administration interface login or the backend databases.
+* If passwords are suspected to have been compromised, they should be changed immediately
+
+### Broken access control
+
+If access control is not implemented properly such as allowing basic users to certain commands with SUDO, malicious actors could abuse functionality to escalate their privileges, potentially to ROOT user. In this machine, a non - privileged user of logan was able to run sudo apport - CLI command to exploit CVE-2023-1326 to escalate their access privileges to the ROOT user.
+
+Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
+
+* Implement proper access control by only allowing properly authenticated and authorized users to edit data, read non - public information, issue elevated system commands etc.
