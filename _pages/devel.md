@@ -2,6 +2,7 @@
 title: 'Devel Machine Walkthrough'
 date: '2024-05-29T11:33:22.318Z'
 keywords: []
+layout: single
 tags: 
   - Security miscofiguration
   - Uncontrolled-file-upload

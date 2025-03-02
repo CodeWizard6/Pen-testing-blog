@@ -2,6 +2,7 @@
 title: 'Devvortex Machine Walkthrough'
 date: '2024-05-29T11:33:22.318Z'
 keywords: []
+layout: single
 tags: 
   - Outdated-and-vulnerable-components
   - Identification-and-authentication-failures
@@ -247,6 +248,15 @@ Security best practices and controls that can block and / or mitigate the effect
 
 * Always keep the web application and all of its dependency components up to date. Vendors often release security patches in newer version of their software that remediate known vulnerabilities in older software versions.
 * If business or technical contraints prevent upgrading to newer , secure software versions, implement security controls such as limiting access, segregating applications on the network, or additional hardening so to mitigate impact in case of compromise by threat actors.
+
+### Command Injection
+
+If user input is not sanitized properly to remove dangerous characters or risky commands are abused, malicious actors can run arbitrary commands resulting in remote system control (e.g: reverse shell), installation of malware, or other harm. In this machine, as a result of insufficient hardening of PHP scripts, I was able to use the SYSTEM() function to run a command that injected a reverse shell connection to my attacking Kali Linux machine,
+
+Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
+
+* Strictly sanitize user input so dangerous characters such as <, >, `, &, or ; are not allowed. A whitelist of allowed characters is ideal in lieu of a blacklist approach which is less robust and needs more maintenance.
+* If the programming languages does not need to use potentially dangerous functions such eval(), or system() , disable these functions in the configuration file for that language. For PHP, these functions can be disabled in the PHP.ini configuration file.
 
 ### Identication and authentication failures - Password reuse
 
