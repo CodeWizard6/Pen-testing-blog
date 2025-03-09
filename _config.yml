@@ -166,12 +166,12 @@ footer:
       icon: "fab fa-fw fa-instagram"
       # url:
 
-
 # Reading Files
 include:
   - .htaccess
   - _pages
   - _posts
+  - _Active-Directory
 exclude:
   - "*.sublime-project"
   - "*.sublime-workspace"
@@ -205,14 +205,12 @@ keep_files:
 encoding: "utf-8"
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 
-
 # Conversion
 markdown: kramdown
 highlighter: rouge
 lsi: false
 excerpt_separator: "\n\n"
 incremental: false
-
 
 # Markdown Processing
 kramdown:
@@ -225,17 +223,14 @@ kramdown:
   smart_quotes: lsquo,rsquo,ldquo,rdquo
   enable_coderay: false
 
-
 # Sass/SCSS
 sass:
   sass_dir: _sass
   style: compressed # https://sass-lang.com/documentation/file.SASS_REFERENCE.html#output_style
 
-
 # Outputting
 permalink: /:title/
 timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-
 
 # Pagination with jekyll-paginate
 paginate: 5 # amount of posts to show
@@ -262,7 +257,6 @@ pagination:
     before: 2
     after: 2
 
-
 # Plugins (previously gems:)
 plugins:
   - jekyll-paginate
@@ -278,7 +272,6 @@ whitelist:
   - jekyll-gist
   - jekyll-feed
   - jekyll-include-cache
-
 
 # Archives
 #  Type
@@ -308,7 +301,6 @@ tag_archive:
 #     category: /categories/:name/
 #     tag: /tags/:name/
 
-
 # HTML Compression
 # - https://jch.penibelst.de/
 compress_html:
@@ -316,6 +308,8 @@ compress_html:
   ignore:
     envs: development
 
+# Excerpts
+excerpt_separator: "<!-- excerpt-end -->"
 
 # Defaults
 defaults:
@@ -323,6 +317,19 @@ defaults:
   - scope:
       path: ""
       type: pages
+    values:
+      layout: single
+      classes: wide
+      author_profile: true
+      read_time: true
+      comments: # true
+      share: true
+      related: true
+
+  # _Active-Directory
+  - scope:
+      path: ""
+      type: Active-Directory
     values:
       layout: single
       classes: wide

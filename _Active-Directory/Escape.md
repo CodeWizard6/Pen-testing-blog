@@ -17,7 +17,9 @@ permalink: /Escape/
 
 ## Machine Summary
 
-Escape is a medium difficulty machine running the Microsoft Windows OS and demonstrates how security misconfigurations in Microsoft Active Directory (AD) combined with weak authentication and authorization can result in the complete compromise of the AD domain. A summary of the attack path to escalate privileges to the local Administrator in the AD domain is as follows:
+Escape is a medium difficulty machine running the Microsoft Windows OS and demonstrates how weak authentication and authorization, insecure stroage of credentials in the local file system, and security misconfigurations in Microsoft Active Directory Certificate Services (ADCS) combined, can result in the complete compromise of the AD domain.<!-- excerpt-end -->
+
+A summary of the attack path to escalate privileges to the local Administrator in the AD domain is as follows:
 
 * As a result of a sensitive PDF file containing login credentials being stored on a SMB file share without requiring user authentication, credentials to Microsoft SQL Server were obtained
 * The net-NTLM hash of the MS SQL service account was obtained and subsequently cracked to reveal the plaintext password

@@ -24,6 +24,12 @@
   a {
     position: relative;
     z-index: 10;
+    color:#FFFFFF;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+      color: $rss-color;
+    }
   }
 
   a[rel="permalink"] {
