@@ -1,21 +1,26 @@
 # main links
 sidebar:
-  - title: Individual Walkthroughs
+  - title: Walkthroughs by Asset Type
     children:
-      - title: "Devel"
-        url: "/Devel/"
-      - title: "Devvortex"
-        url: "/Devvortex/"
-      - title: "Escape"
-        url: "/Escape/"
-      - title: "Love"
-        url: "/Love/"
-      - title: "Manager"
-        url: "/Manager/"
-      - title: "Return"
-        url: "/Return/"
-      - title: "Sauna"
-        url: "/Sauna/"
+      - title: "Active Directory"
+        url: "/Active-Directory/"
+      - title: "Web Applications"
+        url: "/Web-Applications/"
+      - title: "Databases"
+        url: 
       
-  - title: Guides by Vulnerability Type
-    url: ""
+  - title: Walkthroughs by OWASP Category
+    children:
+      - title: "Security misconfiguration"
+        url: 
+      - title: "Server Side Request Forgery (SSRF)"
+        url: 
+      - title: "Vulnerable Components"
+        url:
+      - title: "Injection"
+        url:
+      - title: "Broken Authentication"
+        url:
+      - title: "Sensitive Data Exposure"
+        url: 
+

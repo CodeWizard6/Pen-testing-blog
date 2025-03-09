@@ -111,11 +111,14 @@ analytics:
     tracking_id          :
     anonymize_ip         : # true, false (default)
 
-# collections
+# Define collections
 collections:
   Active-Directory:
     output: true
-    permalink: /:collection/:title/
+    permalink: /Active-Directory/:path/
+  Web-Applications:
+    output: true
+    permalink: /Web-Applications/:path/
 
 # Site Author
 author:
@@ -172,6 +175,7 @@ include:
   - _pages
   - _posts
   - _Active-Directory
+  - _Web-Applications
 exclude:
   - "*.sublime-project"
   - "*.sublime-workspace"
@@ -330,6 +334,19 @@ defaults:
   - scope:
       path: ""
       type: Active-Directory
+    values:
+      layout: single
+      classes: wide
+      author_profile: true
+      read_time: false
+      comments: # true
+      share: true
+      related: true
+
+# _Web-Applications
+  - scope:
+      path: ""
+      type: Web-Applications
     values:
       layout: single
       classes: wide

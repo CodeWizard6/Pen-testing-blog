@@ -1,7 +1,7 @@
 ---
-title: Active Directory
+title: Web Applications
 layout: collection
-collection: Active-Directory
+collection: Web-Applications
 header:
   image: /assets/images/Active_Directory.png
 sidebar:
