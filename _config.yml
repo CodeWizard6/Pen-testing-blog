@@ -111,6 +111,11 @@ analytics:
     tracking_id          :
     anonymize_ip         : # true, false (default)
 
+# collections
+collections:
+  Active-Directory:
+    output: true
+    permalink: /:collection/:title/
 
 # Site Author
 author:
