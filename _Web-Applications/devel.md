@@ -3,17 +3,12 @@ title: 'Devel Machine Walkthrough'
 date: '2024-05-29T11:33:22.318Z'
 keywords: []
 layout: single
-tags: 
-  - Security miscofiguration
-  - Uncontrolled-file-upload
-  - Missing-security-patches
-categories:
-  - Web applications
+header:
+  image: /assets/images/Devel.png
 toc: true
 toc_label: "Table of Contents"
 sidebar:
   nav: "sidebar"
-permalink: /Devel/
 ---
 
 ## Machine Summary

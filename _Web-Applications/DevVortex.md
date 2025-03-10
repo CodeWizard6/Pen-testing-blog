@@ -3,19 +3,12 @@ title: 'Devvortex Machine Walkthrough'
 date: '2024-05-29T11:33:22.318Z'
 keywords: []
 layout: single
-tags: 
-  - Outdated-and-vulnerable-components
-  - Identification-and-authentication-failures
-  - Broken access control
-  - Injection
-categories:
-  - Web applications
-  - Databases
+header:
+  image: /assets/images/Devvortex.png
 toc: true
 toc_label: "Table of Contents"
 sidebar:
   nav: "sidebar"
-permalink: /Devvortex/
 ---
 ## Machine Summary
 
@@ -24,7 +17,7 @@ DevVortex is a machine running the Linux operating system and shows how exploita
 * As a result of a vulnerable Joomla content management system in use, an unauthenticated information disclosure vulnerabiity (CVE-2023-23752) was exploited to leak internal application user IDs and plaintext passwords.
 * The set of user credentials was used to login to the Joomla administration panel.
 * A PHP template running was modified via command injection to run a malicious reverse shell payload and connect to my Kali Linux machine.
-* As a result of password reuse, the password discovered above was used to login to a SQL database instance where hashed credentials for another use was discovered. The hash was subsequently cracked offline to obtain the plaintext password of this user.
+* As a result of password reuse, the password discovered above was used to login to a SQL database instance where hashed credentials for another user was discovered. The hash was subsequently cracked offline to obtain the plaintext password of this user.
 * As a result of the victim's computer running an outdated and vulnerable version of the APPORT-CLI error reporting program, vulnerability CVE-2023-1372 was exploited to fully escalated my privilges to ROOT user.
 
 ![DevVortex machine exploitation matrix](/Pen-testing-blog/assets/images/1__dntjguqOXL5Kir2j__xvj0w.png "Figure 1 - Machine exploitation matrix")

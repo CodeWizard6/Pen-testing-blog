@@ -2,17 +2,12 @@
 title: 'Escape Machine Walkthrough'
 keywords: []
 layout: single
-tags: 
-  - Sensitive data exposure
-  - Security misconfiguration
-categories:
-  - Active Directory
-  - Databases
+header:
+  image: /assets/images/Escape.png
 toc: true
 toc_label: "Table of Contents"
 sidebar:
   nav: "sidebar"
-permalink: /Escape/
 ---
 
 ## Machine Summary

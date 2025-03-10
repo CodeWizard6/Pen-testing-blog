@@ -52,7 +52,7 @@
 .pagination {
   @include clearfix();
   float: inline-start;
-  margin-top: 1em;
+  margin-top: 0.1em;
   padding-top: 1em;
   width: 100%;
 
@@ -119,15 +119,17 @@
   /* next/previous buttons */
   &--pager {
     display: block;
-    padding: 1em 2em;
+    padding: 0.5em 1em;
     float: inline-start;
-    width: 50%;
+
+    width: 40%;
     font-family: $sans-serif;
-    font-size: $type-size-5;
+    font-size: $type-size-6;
     font-weight: bold;
     text-align: center;
     text-decoration: none;
-    color: $muted-text-color;
+    background-color:$bitbucket-color;
+    color: $tumblr-color;
     border: 1px solid mix(#000, $border-color, 25%);
     border-radius: $border-radius;
 
@@ -549,6 +551,10 @@
     }
   }
 
+  li > a {
+    font-size: $type-size-2
+  }
+
   li ul > li > a {
     padding-inline-start: 1.25rem;
     font-size: $type-size-3;
@@ -557,7 +563,7 @@
 
   li ul li ul > li > a {
     padding-inline-start: 5.00rem;
-    font-size: $type-size-3;
+    font-size: $type-size-6;
     font-weight: normal;
   }
 

@@ -328,7 +328,7 @@ defaults:
       read_time: false
       comments: # true
       share: true
-      related: true
+      related: false
 
   # _Active-Directory
   - scope:
@@ -341,7 +341,7 @@ defaults:
       read_time: false
       comments: # true
       share: true
-      related: true
+      related: false
 
 # _Web-Applications
   - scope:
@@ -354,4 +354,4 @@ defaults:
       read_time: false
       comments: # true
       share: true
-      related: true
+      related: false
