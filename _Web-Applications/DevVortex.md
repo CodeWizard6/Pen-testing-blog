@@ -10,11 +10,12 @@ toc_label: "Table of Contents"
 sidebar:
   nav: "sidebar"
 ---
-## Machine Summary
 
 DevVortex is a machine running the Linux operating system and shows how exploitation of the combination of outdated and vulnerable components, password reuse, and command injection vulnerablities can completely compromise a web application.
 
 <!-- excerpt-end -->
+
+## Attack Path Summary
 
 A summary of the attack path to fully escalate privileges to ROOT user is as follows:
 

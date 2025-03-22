@@ -12,11 +12,11 @@ sidebar:
 
 ![Machine exploitation matrix](/Pen-testing-blog/assets/images/1__NTX__xdKE5hLRK9Zyw5ECig.png "Figure 1 - Machine exploitation matrix")
 
-## Machine Summary
-
 Love is a relatively straightforward machine running the Windows operating system (OS) and shows how server side request forgery, unrestricted file uploads and broken access control vulnerabilities combined, can lead to the total compromise of a web application.
 
 <!-- excerpt-end -->
+
+## Attack Path Summary
 
 A summary of the attack path is as follows:
 
@@ -95,7 +95,7 @@ I attempt to enumerate the unknown service running on port 5040 via sending a cU
 
 ### Enumeration of web servers on ports 80, 443, and 5000
 
-I visit the domain love.htb on each of the ports listed above. For **http://love.htb:80,** I get a login page as shown in Figure 7 below. I tried the following techniques to bruteforce login credentials and all failed:
+I visit the domain love.htb on each of the ports listed above. For **<http://love.htb:80>,** I get a login page as shown in Figure 7 below. I tried the following techniques to bruteforce login credentials and all failed:
 
 * Test for common default user ID / passwords in use (admin / admin etc.)
 * Attempt to enumerate valid users via observation of different error messages shown when valid and invalid users IDs are entered
@@ -267,4 +267,4 @@ As a result of the AlwayInstallElevated registry value being enabled (registry k
 
 Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
 
-* Do not non administratrive users to install applications or files on machines without a valid business use case. Restrict what access privilges normal user accounts have to only the access necessary for a user to do his or her job role.
+* Do not allow non administratrive users to install applications or files on machines by disabling this setting unless there is a valid business use case. Restrict what access privilges normal user accounts have to only the access necessary for a user to do his or her job role.

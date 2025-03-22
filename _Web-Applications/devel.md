@@ -11,11 +11,11 @@ sidebar:
   nav: "sidebar"
 ---
 
-## Machine Summary
-
 Devel is a relatively straightforward machine running the Microsoft Windows OS that shows how weak authentication to file servers, uncontrolled file uploads and missing security patches, combined, can lead to the complete compromise of a web application.
 
 <!-- excerpt-end -->
+
+## Attack Path Summary
 
 A summary of the attack path to fully escalate privileges to ROOT user is as follows:
 
