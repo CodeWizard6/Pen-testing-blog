@@ -14,7 +14,11 @@ sidebar:
 
 ## Machine Summary
 
-Love is a relatively straightforward machine running the Windows operating system (OS) and shows how server side request forgery, unrestricted file uploads and broken access control vulnerabilities combined, can lead to the total compromise of a web application. A summary of the attack path is as follows:
+Love is a relatively straightforward machine running the Windows operating system (OS) and shows how server side request forgery, unrestricted file uploads and broken access control vulnerabilities combined, can lead to the total compromise of a web application.
+
+<!-- excerpt-end -->
+
+A summary of the attack path is as follows:
 
 * As a result of a [server-side request forgery vulnerabiliity](https://owasp.org/www-community/attacks/Server_Side_Request_Forgery), I was able to force the web application server to make an outbound call to my Kali Linux machine that revealed the ADMIN user credentials for web application.
 * As a result of a [unrestricted file upload vulnerability](https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload) in the web application, I was able to upload a reverse shell which initiated a connection back to my Kali Linux machine as the normal user, Phoebe.
@@ -232,10 +236,35 @@ After the malicious msi file is successfully installed, the malicious reverse sh
 
 ![Full escalation of access privileges to NT Authority\System](/Pen-testing-blog/assets/images/SuccessfulEscalationNTAuthoritySystem_Love.png ""Figure 23 - Successful escalation of access privileges to NT Authority\System")
 
-### Vulnerability Summary
+## Vulnerabilities - Exploitation and Mitigation Summary
 
-This machine contained the following vulnerabilities:
+The machine demonstrated the following vulnerabilities and how they can be exploited. I've also included some security controls that can mitigate exploitation:
 
-* **Server-side request forgery** — As a result of not limiting server requests to only trusted endpoints, I was able to force the server to connect to my Kali Linux instance on my behalf and by not filtering localhost or http://127.0.0.1 from permitted input in user supplied URL, I was able to force the server to send a request to itself via its loopback address and thereby access sensitive , internal only resources without authentication.
-* **Arbitrary file upload** — As a result of no filtering in place for either file type, file content, or file extensions for files being uploaded to the images directory on the web server, I was able upload a malicious payload in form of a web shell in lieu of a legitimate image file type such as jpeg or png.
-* **Security misconfiguration** - As a result of the AlwayInstallElevated registry value being enabled (registry keys set to 1), I was able to install msi files as a non — administrative user.
+### Server-side request forgery
+
+As a result of not limiting server requests to only trusted endpoints or filtering localhost and its aliases (e.g: <http://127.0.0.1>) from permitted input in user supplied URL to be scanned, I was able to force the server to send a request to itself via its loopback address and thereby access sensitive, internal only resources such as the administration interface, without authentication.
+
+Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
+
+* Sanitize user supplied URLs against a whitelist of allowed URLS or domains. Any bad input such as localhost or 127.0.0.1 should be rejected.
+* Restrict the ability of the web server to make outbound requests to destination IPs not on an approved whitelist.
+* Apply multi-layer access controls against internal systems that are often a target of SSRF attacks such as via isolation at the network layer.
+
+### Arbitrary file upload
+
+As a result of no filtering in place for either file type, file content, or file extensions for files being uploaded to the web root directory on the web server, I was able upload a malicious  web shell in lieu of a legitimate image file type such as jpeg or png.
+
+Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
+
+* Strictly limit the file extenstions that can be uploaded to the web root directory based on how the web application is being used (e.g: PDF , PNG , JPG if only images are needed).
+* Disable execute permissions on the web server root so that any files uploaded will not be able to execute. This will also prevent any files uploaded from being recognized as executable scripts by the web server.
+* Do not upload files directly to the web root but rather serve any uploaded files via security handlers. This will reduce the attack surface exposed to malicious actors by storing uploaded files in a directory not directly accessible from the web root.
+* Use a combination of methods such as file MIME type inspection and deep inspection of file contents to ensure that only expected and legitimate file are uploaded to the web server. Do not rely on user supplied parameters such as Content Type header as they are easily spoofed.
+
+### Broken Access Control
+
+As a result of the AlwayInstallElevated registry value being enabled (registry keys set to 1), I was able to install msi files containing a malicious payload as a non — administrative user.
+
+Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
+
+* Do not non administratrive users to install applications or files on machines without a valid business use case. Restrict what access privilges normal user accounts have to only the access necessary for a user to do his or her job role.

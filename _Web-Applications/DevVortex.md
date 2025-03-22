@@ -12,7 +12,11 @@ sidebar:
 ---
 ## Machine Summary
 
-DevVortex is a machine running the Linux operating system and shows how exploitation of the combination of outdated and vulnerable components, password reuse, and command injection vulnerablities can completely compromise a web application. A summary of the attack path to fully escalate privileges to ROOT user is as follows:
+DevVortex is a machine running the Linux operating system and shows how exploitation of the combination of outdated and vulnerable components, password reuse, and command injection vulnerablities can completely compromise a web application.
+
+<!-- excerpt-end -->
+
+A summary of the attack path to fully escalate privileges to ROOT user is as follows:
 
 * As a result of a vulnerable Joomla content management system in use, an unauthenticated information disclosure vulnerabiity (CVE-2023-23752) was exploited to leak internal application user IDs and plaintext passwords.
 * The set of user credentials was used to login to the Joomla administration panel.

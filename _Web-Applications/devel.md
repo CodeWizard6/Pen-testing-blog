@@ -13,9 +13,15 @@ sidebar:
 
 ## Machine Summary
 
-Devel is a relatively straightforward machine running the Microsoft Windows OS that shows how weak authentication to file servers, uncontrolled file uploads and missing security patches, combined, can lead to the complete compromise of a web application.  As a result the file transfer protocol (FTP) server allowing ANONYMOUS access, I was able to login to the FTP server without credentials.  As a result of the IIS web server not restricting what file types can be uploaded to it, I was able to upload and execute a malicious ASPX file containing a reverse shell payload on the victim machine to gain a foothold as a low privileged, non-administrative user. As a result of missing security patches, a kernel vulnerability that leads to privilege escalation was exploited to give me root user as **NT Authority\\System.**
+Devel is a relatively straightforward machine running the Microsoft Windows OS that shows how weak authentication to file servers, uncontrolled file uploads and missing security patches, combined, can lead to the complete compromise of a web application.
 
-In the last section, I've included a summary of all the vulnerabilities found on this machine and security controls to mitigate exploitation.
+<!-- excerpt-end -->
+
+A summary of the attack path to fully escalate privileges to ROOT user is as follows:
+
+* As a result the file transfer protocol (FTP) server allowing ANONYMOUS access, I was able to login to the FTP server without credentials.  
+* As a result of the IIS web server not restricting what file types can be uploaded to it, I was able to upload and execute a malicious ASPX file containing a reverse shell payload on the victim machine to gain a foothold as a low privileged, non-administrative user.
+* As a result of missing security patches, a kernel vulnerability that leads to privilege escalation was exploited to give me root user as **NT Authority\\System.**
 
 ![Devel machine exploitation matrix](/Pen-testing-blog/assets/images/1__E89__CXQXg__HC3aRCjl7LDw.png "Figure 1 -Devel machine exploitation matrix")
 
@@ -120,7 +126,7 @@ The final step is to transfer the malicious payload from my Kali Linux machine t
 
 The machine demonstrated the following vulnerabilities and how they can be exploited. I've also included some security controls that can mitigate exploitation:
 
-### **Uncontrolled file upload**
+### Uncontrolled file upload
 
 Vulnerability allows a malicious user to upload dangerous file types such as executables directly to a web server. In this example, as a result of the web server not validating the file extensions and content of files uploaded, I was able to upload a malicious ASPX file containing a reverse shell payload allowing me to gain unauthorized access on the web server for initial foothold.
 
@@ -130,7 +136,7 @@ Security best practices and controls that can block and / or mitigate the effect
 * Strictly limit the file length and size of uploaded files.
 * Use a combination of methods such as file MIME type validation and file content validation to detect dangerous file types. Do not rely on the file extension or CONTENT-Type header as these values are easily spoofed.
 
-### **Security misconfiguration**
+### Security misconfiguration
 
 Misconfigured or insecurely configured web server settings allows malicious actors to take malicious actions. As a result of ANONYMOUS login with WRITE access being enabled on the FTP server, I was able to abuse this function to upload a malicious reverse shell payload despite not being not authenticated to the FTP server
 
@@ -138,7 +144,7 @@ Security best practices and controls that can block and / or mitigate the effect
 
 * Disable ANONYMOUS access to FTP servers as unauthenticated users should not be permitted to read or write to file shares.
 
-### **Missing security patches**
+### Missing security patches
 
 As a result of missing security patches, I was able to use a publicly released vulnerability exploit to escalate my access to root user upon gaining initial foothold on machine.
 
