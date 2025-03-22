@@ -16,6 +16,10 @@
     width: calc(100% - #{$right-sidebar-width});
     padding-inline-end: $right-sidebar-width;
   }
+
+  p {
+    font-size: $type-size-6;
+  }
 }
 
 .archive__item {
