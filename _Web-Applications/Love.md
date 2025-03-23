@@ -22,7 +22,7 @@ A summary of the attack path is as follows:
 
 * As a result of a [server-side request forgery vulnerabiliity](https://owasp.org/www-community/attacks/Server_Side_Request_Forgery), I was able to force the web application server to make an outbound call to my Kali Linux machine that revealed the ADMIN user credentials for web application.
 * As a result of a [unrestricted file upload vulnerability](https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload) in the web application, I was able to upload a reverse shell which initiated a connection back to my Kali Linux machine as the normal user, Phoebe.
-* As a result of broken access control vulnerability in which all users were allowed to install Windows installer (MSI packages), I installed a malicious MSI package containing a reverse shell payload that once executed, elevated my access privileges to NT Authority\System.
+* As a result of [broken access control vulnerability](https://owasp.org/Top10/A01_2021-Broken_Access_Control/) in which all users were allowed to install Windows installer (MSI packages), I installed a malicious MSI package containing a reverse shell payload that once executed, elevated my access privileges to NT Authority\System.
 
 ## Step 1 — Enumeration
 

@@ -27,6 +27,8 @@ A summary of the attack path to fully escalate privileges to ROOT user is as fol
 
 ## Step 1 — Enumeration
 
+### Enumerating with Nmap
+
 As a first step, I try to gather as much as information as I can about the target machine such as open ports, running services, OS and version etc. For this I use **Nmap** tool with below syntax. Brief explanation of flags:
 
 * \-sV — Detect services running at IP address and their versions
