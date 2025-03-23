@@ -3,7 +3,7 @@ title: 'Love Machine Walkthrough'
 keywords: []
 layout: single
 header:
-  image: /assets/images/love.png
+  image: /assets/images/Love.png
 toc: true
 toc_label: "Table of Contents"
 sidebar:
