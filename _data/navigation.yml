@@ -23,4 +23,18 @@ sidebar:
         url:
       - title: "Sensitive Data Exposure"
         url: 
-
+    
+  - title: Vulnerability Technical Guides
+    children:
+      - title: "AS-REP roasting"
+        url: 
+      - title: "Server Side Request Forgery (SSRF)"
+        url: 
+      - title: "Domain Sync attack"
+        url:
+      - title: "ESC 1 attack ADCS"
+        url:
+      - title: "ESC 7 attack ADCS"
+        url:
+      - title: "LDAP pass back attack"
+        url: 

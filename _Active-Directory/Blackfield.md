@@ -389,3 +389,18 @@ evil-winrm -i 10.10.10.192 -u Administrator -H 184fb5e5178480be64824d4cd53899ee
 ```
 
 ![Privilege escalation to Administrator](/Pen-testing-blog/assets/images/Blackfield/Privilege_escalation_Administrator.png "Figure 35 - Privilege escalation to Administrator via PTH attack")
+
+## Vulnerabilities - Exploitation and Mitigation Summary
+
+The machine demonstrated the following vulnerabilities and how they can be exploited. I've also included some security controls that can mitigate exploitation.
+
+### Broken authentication - Disabled Kerberos preauthentication
+
+When an AD account has the setting of Kerberos preauthentication disabled, the account is susceptible to AS-REP roasting attacks where the KDC on the domain controller will respond with a ticket granting ticket (TGT) for any individual making an authentication request without verifying identity first.  As a result of the Support AD account having Kerberos preauthentication disabled, I was able to obtain a TGT for the account without knowing the account password, and subsequently crack the password hash offline.
+
+Security best practices and controls that can block and / or mitigate the effects of this vulnerability include the following:
+
+* Do not disable Kerberos preauthentication unless absolutely needed for your use case.
+* Implement strong password policies that include minimum length and complexity
+* Consider implementing multi-factor authentication so even if malicious actors obtain your password, they will need an additional method of identity to gain unauthorized account access.
+
