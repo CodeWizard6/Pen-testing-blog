@@ -3,7 +3,7 @@ title: 'Escape Machine Walkthrough'
 keywords: []
 layout: single
 header:
-  image: /assets/images/Escape.png
+  image: /assets/images/Escape walkthrough header image.png
 toc: true
 toc_label: "Table of Contents"
 sidebar:
