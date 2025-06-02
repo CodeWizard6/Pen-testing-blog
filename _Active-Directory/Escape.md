@@ -12,8 +12,6 @@ sidebar:
 
 Escape is a medium difficulty machine running the Microsoft Windows OS and demonstrates how weak authentication and authorization, insecure stroage of credentials in the local file system, and security misconfigurations in Microsoft Active Directory Certificate Services (ADCS) combined, can result in the complete compromise of the AD domain.
 
-<!-- excerpt-end -->
-
 ## Attack Path Summary
 
 A summary of the attack path to escalate privileges to the local Administrator in the AD domain is as follows:

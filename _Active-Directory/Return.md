@@ -12,8 +12,6 @@ sidebar:
 
 Return is an easy machine running the Microsoft Windows operation system. The machine shows how broken access control to the administration interfaces of, and excessive access privileges in peripheral devices, such as printers, can be exploited to fully compromise an Active Directory domain.
 
-<!-- excerpt-end -->
-
 ## Attack Path Summary
 
 A summary of the attack path is as follows:

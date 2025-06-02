@@ -8,11 +8,11 @@ toc: true
 toc_label: "Table of Contents"
 sidebar:
   nav: "sidebar"
+
+
 ---
 
 Blackfield is a hard difficulty machine running the Microsoft Windows OS and demonstrates how a simple compromise of a low - privileged AD domain user account combined with inadequate password management can result in the full compromise of an AD domain.
-
-<!-- excerpt-end -->
 
 ## Attack Path Summary
 
@@ -376,6 +376,7 @@ The final step to escalating my access to Administrator is to dump the password 
 ```bash
 impacket-secretsdump -ntds ntds.dit -system system.hiv -just-dc-ntlm local
 ```
+
 ![Password hashes dumped from ntds.dit file](/Pen-testing-blog/assets/images/Blackfield/Password_hashes_dumped_ntds.dit.png "Figure 34 - AD account password hashes dumped from ntds.dit file")
 
 A simple pass the hash attack via evil-winrm Windows remote management simulator fully escalates my access privileges to Administrator per Figure 35 below. Syntax is as follows:
@@ -403,4 +404,3 @@ Security best practices and controls that can block and / or mitigate the effect
 * Do not disable Kerberos preauthentication unless absolutely needed for your use case.
 * Implement strong password policies that include minimum length and complexity
 * Consider implementing multi-factor authentication so even if malicious actors obtain your password, they will need an additional method of identity to gain unauthorized account access.
-

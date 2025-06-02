@@ -6,6 +6,7 @@ header:
   image: /assets/images/WebApplications.jpg
 sidebar:
   nav: "sidebar"
+classes: wide
 ---
 
 In this collection are walkthroughs based on exploiting vulnerabilities in web applications. I show some common vulnerabilities that are often used to compromise web applications such as use of vulnerable web application components, server side request forgery (SSRF), and broken authentication or access control. These examples show the severe impact that exploitation can have to include full escalation of privileges to SYSTEM or ADMINISTRATOR user. Moreover, I demonstrate tools that are often used in real pen-testing exercises of web applications such as BurpSuite, Responder, GoBuster and NetCat.
