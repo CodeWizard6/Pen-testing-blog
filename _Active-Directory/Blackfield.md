@@ -1,6 +1,7 @@
 ---
 title: 'Blackfield Machine Walkthrough'
 keywords: []
+excerpt: "Blackfield is a hard machine that demonstrates how weak authentication, misconfigurations in Kerberos of Active Directory, and abuse of built-in Windows user account permissions can be chained to result in the complete compromise of an Active Directory domain."
 layout: single
 header:
   image: /assets/images/Blackfield/Blackfield.png
@@ -8,8 +9,6 @@ toc: true
 toc_label: "Table of Contents"
 sidebar:
   nav: "sidebar"
-
-
 ---
 
 Blackfield is a hard difficulty machine running the Microsoft Windows OS and demonstrates how a simple compromise of a low - privileged AD domain user account combined with inadequate password management can result in the full compromise of an AD domain.
@@ -160,9 +159,9 @@ I've reached the limit of what I can enumerate on the AD domain with no credenti
 impacket-GetNPUsers.py blackfield.local/ -dc-ip 10.10.10.192 -request -no-pass -userslist users.txt -format hashcat | grep krb5asrep
 ```
 
-![Service service account susceptible to AS-REP roasting attack](/Pen-testing-blog/assets/images/Blackfield/KerberosPasswordHashObtained_service.png "Figure 10 - Kerberos password hash captured for Support service account due to AS-REP roasting attack")
+![Support service account susceptible to AS-REP roasting attack](/Pen-testing-blog/assets/images/Blackfield/KerberosPasswordHashObtained_service.png "Figure 10 - Kerberos password hash captured for support service account due to successful AS-REP roasting attack")
 
-### Cracking Kerberos hash to obtain plaintext password of Service service account
+### Cracking Kerberos hash to obtain plaintext password of Support service account
 
 The next step after obtaining the Kerberos password hash is to crack it offline to obtain the plaintext password of the Support account Service for which I will use the Hashcat tool. The input is shown in Figure 11 and output in Figure 12. Explanation of syntax is as follows:
 
@@ -176,23 +175,23 @@ The next step after obtaining the Kerberos password hash is to crack it offline 
 hashcat -a 0 -m 18200 'hash to crack' /usr/share/wordlists/rockyou.txt -o crack_service_password_hash.txt
 ```
 
-![Hashcat input for cracking Service service account Kerberos password hash](/Pen-testing-blog/assets/images/Blackfield/Service_password_hash_HashCat_input.png "Figure 11 - Hashcat program input for cracking Kerberos password hash for Support service account")
+![Hashcat input for cracking support service account Kerberos password hash](/Pen-testing-blog/assets/images/Blackfield/Service_password_hash_HashCat_input.png "Figure 11 - Hashcat program input for cracking Kerberos password hash for Support service account")
 
-![Kerberos password hash cracked for service account Service](/Pen-testing-blog/assets/images/Blackfield/Service_password_hash_cracked_HashCat.png "Figure 12 - Support service account Kerberos password hash cracked")
+![Kerberos password hash cracked for service account support](/Pen-testing-blog/assets/images/Blackfield/Service_password_hash_cracked_HashCat.png "Figure 12 - Support service account Kerberos password hash cracked")
 
 ## Step 3 - Lateral Movement to Audit2020 - Force Password Reset
 
-After compromising the Service service account, I begin to move laterally to other assets on the AD domain. The first step is to check what access rights the Service service account has with CrackMap Exec tool (net exec tool) for all services: Shell access via Windows remote management functionality, additional file share access via SMB, and additional ability to enumerate AD objects via LDAP. Per screenshots 13 - 15 below, all fails or yields nothing of interest to me.
+After compromising the Support service account, I begin to move laterally to other assets on the AD domain. The first step is to check what access rights the support service account has with CrackMap Exec tool (net exec tool) for all services: Shell access via Windows remote management functionality, additional file share access via SMB, and additional ability to enumerate AD objects via LDAP. Per screenshots 13 - 15 below, all fails or yields nothing of interest to me.
 
 ### Enumerating additional access via SMB, LDAP, and WinRM - Failure
 
 The first service I check access for is WinRM to see if I can get a shell login onto the AD domain. Per Figure 13 below, support service account does not have access to spawn a shell via windows remote access (WinRM) service.
 
 ```bash
-nxc smb 10.10.10.192 -u service -p '#00^BlackKnight'
+nxc smb 10.10.10.192 -u support -p '#00^BlackKnight'
 ```
 
-![Service service account no access to WinRM](/Pen-testing-blog/assets/images/Blackfield/ServiceAccountNoWinRMAccess.png "Figure 13 - Support service account does not have access to WinRM service")
+![Support service account no access to WinRM](/Pen-testing-blog/assets/images/Blackfield/ServiceAccountNoWinRMAccess.png "Figure 13 - Support service account does not have access to WinRM service")
 
 I next move on to check if these new credentials provided me with additional access to file shares that were inaccessible before. Per Figure 14 below, I was able to gain read access to the NETLOGON and SYSVOL file shares. However, neither of these shares contained anything useful for me such as credentials per Figures 15 below.
 
@@ -204,7 +203,7 @@ smbmap 10.10.10.192 -u support -p '#00^BlackKnight'
 
 ![Nothing useful on NETLOGON and SYSVOL file shares](/Pen-testing-blog/assets/images/Blackfield/SMBShares_NETLOGON_SYSVOL_NothingUseful.png "Figure 15 - Nothing useful on NETLOGON and SYSVOL file shares")
 
-The final service I check is LDAP. Per snippet of output in Figure 15, while I was able to obtain the name of the domain controller as DC01, there was nothing else interesting in the output of domain object enumeration. Explanation of flags is as follows:
+The final service I check is LDAP. Per snippet of output in Figure 16, while I was able to obtain the name of the domain controller as DC01, there was nothing else interesting in the output of domain object enumeration. Explanation of flags is as follows:
 
 * -H - Specify the IP address of the LDAP server to search
 * -x - Specify that simple authentication is to be used to bind to the LDAP server
@@ -216,7 +215,7 @@ The final service I check is LDAP. Per snippet of output in Figure 15, while I w
 ldapsearch -H ldap://10.10.10.192 -x -b "DC=blackfield,DC=local" -D support@Blackfield.local -w '#00^BlackKnight'
 ```
 
-![Nothing useful in LDAP output](/Pen-testing-blog/assets/images/Blackfield/LDAPOutPut_NotUseful.png "Figure 15 - Nothing useful in LDAP output")
+![Nothing useful in LDAP output](/Pen-testing-blog/assets/images/Blackfield/LDAPOutPut_NotUseful.png "Figure 16 - Nothing useful in LDAP output")
 
 ### Enumerating the AD domain via Bloodhound tool
 
