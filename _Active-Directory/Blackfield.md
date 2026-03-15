@@ -11,7 +11,7 @@ sidebar:
   nav: "sidebar"
 ---
 
-Blackfield is a hard difficulty machine running the Microsoft Windows OS and demonstrates how a simple compromise of a low - privileged AD domain user account combined with inadequate password management can result in the full compromise of an AD domain.
+Blackfield is a hard difficulty machine running the Microsoft Windows OS and demonstrates how a simple compromise of a low - privileged AD domain user account combined with inadequate password management can result in the full compromise of an AD domain. Please note this machine was completed in two sessions so the HTB machine IP address varies.
 
 ## Attack Path Summary
 
@@ -41,7 +41,7 @@ I first run a scan to discover open ports per Figure 2 below and then run the se
 ```bash
 nmap 10.10.11.108 -p- -T4
 
-nmap 10.10.11.108 -p 53,88,135,139,389,445,593,3268,5985 -sC, sV, -n -T4
+nmap 10.10.11.108 -p 53,88,135,139,389,445,593,3268,5985 -sC, -sV, -n -T4
 ```
 
 ![Nmap scan 1](/Pen-testing-blog/assets/images/Blackfield/NmapScan1.png "Figure 2 - Nmap scan output 1")
@@ -83,7 +83,7 @@ smbclient -N //10.10.10.192/profiles$
 
 ![Listing of directories in the $profiles file share](/Pen-testing-blog/assets/images/Blackfield/ProfilesShareListing.png "Figure 5 - Profiles$ file share listing")
 
-Due to the large number of directories, I will be using the tool of CrackMap Exec in super_spidering mode to automatically spider all file shares I can access and see how many files are in each of the directories shown in Figure 5 previously. Per Figure 6, there are a total of 314 directories but they are all empty. Explanation of flags is as follows:
+Due to the large number of directories, I use the tool of CrackMapExec, also known as netexec - nxc, in super_spidering mode to automatically spider all file shares and see how many files are in each of the directories shown in Figure 5 previously. Per Figure 6, there are a total of 314 directories but they are all empty. Explanation of flags is as follows:
 
 * -u - Specify the user to authenticate as (guest as empty string will not work)
 * -p - Specify the password of the account to authenticate as (Specify blank string to leave blank)
@@ -95,7 +95,7 @@ nxc smb 10.10.10.192 -u guest -p '' -M super_spider
 
 ![File shares spidering results](/Pen-testing-blog/assets/images/Blackfield/SMBSuperSpideringResults.png "Figure 6 - File shares spidering results")
 
-At this point, I decide to build a list of usernames to test if any of the AD accounts have the setting **Do not require Kerberos preauthentication** enabled which makes the account vulnerable to an AS-REP roasting attack. The command I used to generate the user list  and the explanation of syntax is as follows. The outcome is shown in Figure 7 below.
+At this point, I decide to build a list of usernames to test if any of the AD accounts have the setting **Do not require Kerberos preauthentication** enabled which makes the account vulnerable to an AS-REP roasting attack. The AS-REP roasting attack works by forcing the KDC on the domain controller to give a TGT for any user, including malicious users as no password is being validated to confirm user identities. The command I used to generate the user list  and the explanation of syntax is as follows. The outcome is shown in Figure 7 below.
 
 * smbclient -N //10.10.10.192/$profiles - Connect to the $profiles share using a null session over the smb protocol
 * -c ls - run the ls command immediately after connecting to the share to list the file directories
@@ -167,7 +167,7 @@ The next step after obtaining the Kerberos password hash is to crack it offline 
 
 * -a - Specify the hash cracking mode. Select 0 in this case for a dictionary or straight attack
 * -m - Specify the type of hash to crack. Use 18200 as the hash type is a Kerberos password hash derived from the AS-REP reponse
-* 'Hash to crack' - Enter the hash to be cracked from the output of the Impacket Get-NPUsers.py Python script. Note: this will be different for easch player each iteration
+* 'Hash to crack' - Enter the hash to be cracked from the output of the Impacket Get-NPUsers.py Python script. Note: this will be different for each player each iteration
 * /usr/share/wordlists/rockyou.txt - Enter the wordlist to use to crack the hash. While I used the well know Rockyou.txt file here, many other wordlists can be used
 * -o - Specify the output file to write the cracked password to
 
@@ -271,7 +271,7 @@ After connecting to and enumerating the Forensic file share, I discover a local 
 
 ### Extracting NTLM hash for svc_backup AD account from Lsass process dump file
 
-After extracting the Lsass.DMP dump file from the zip file, I use the tool of [Pypykatz.py](https://github.com/skelsec/pypykatz) to extract the various credentials for the different user accounts present in system memory, althou Per command output in Figure 22, one of the credentials, in the form of a NTLM password hash, was found for the **svc_backup** AD domain account.
+After extracting the Lsass.DMP dump file from the zip file, I use the tool of [Pypykatz.py](https://github.com/skelsec/pypykatz) to extract the various credentials for the different user accounts present in system memory. Per command output shown in Figure 22, one of the credentials, in the form of a NTLM password hash, was found for the **svc_backup** AD domain account. Pypykatz essentially acts as a parser of the LSASS dump and can easily isolate credentials due to way LSASS stores its contents in predictable formats in RAM memory.
 
 ```bash
 pypykatz lsa minidump lsass.DMP
@@ -321,7 +321,7 @@ I create a simple text file, shadowcopy.txt, containing the below lines. Please 
 * create - Create the volume shadow copy
 * expose %LZ% E: - Mount the volume shadow copy at mount point of drive E: (freely chosen)
 
-As I am creating this script on a Linux based system but will be running it on a Windows based system, I run the conversion program, **unix2dos** to ensure line ending compatbility before uploading it to the compromised AD domain  in a working directory that I have write access to like ProgramData. Please reference Figure 28 below.
+As I am creating this script on a Linux based system but will be running it on a Windows based system, I run the conversion program, **unix2dos** to ensure line ending compatibility before uploading it to the compromised AD domain  in a working directory that I have write access to like ProgramData. Please reference Figure 28 below.
 
 ```bash
 set context persistent nowriters
