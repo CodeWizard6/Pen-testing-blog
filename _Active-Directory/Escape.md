@@ -2,6 +2,7 @@
 title: 'Escape Machine Walkthrough'
 keywords: []
 layout: single
+excerpt: "Escape is a medium rated machine that shows how excessive AD certificate enrollment privileges can be abused and result in the complete compromise of a AD domain."
 header:
   image: /assets/images/Escape walkthrough header image.png
 toc: true

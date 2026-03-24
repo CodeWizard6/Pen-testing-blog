@@ -2,6 +2,7 @@
 title: 'Return Machine Walkthrough'
 keywords: []
 layout: single
+excerpt: "Return is an easy rated machine that shows how lack of authentication to Active Directory connected peripheral device administration interfaces can be abused to result in the complete compromise of the AD domain."
 header:
   image: /assets/images/Return.png
 toc: true

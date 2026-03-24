@@ -312,8 +312,6 @@ compress_html:
   ignore:
     envs: development
 
-# Excerpts
-excerpt_separator: "<!-- excerpt-end -->"
 
 # Defaults
 defaults:
