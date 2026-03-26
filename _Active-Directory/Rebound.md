@@ -40,13 +40,23 @@ Rebound machine is deliberately hardened and NTLM authentication has been disabl
 
 ### Configuring krbt5 config file
 
-I'm running a Kali virtual machine. The Kali package krb5-user provides the required tools of kinit, klist and kdestroy used to request, view, and destroy Kerberos ticket granting tickets (TGT). When krb5-user package is installed via native Linux package manager of APT, it will install all other prerequisite packages too. The Kerberos configuration file is stored in /etc/krb5.conf. Before a Kerberos TGT can be requested, I must first populate this file with the HTB domain controller and realm information. Please note the following **important details** as this config file is strict about section formatting and capitalization of AD domain objects. Please see Figure X below for a example of a properly confgured and formatted krbt5.conf configuration file.
+I'm running a Kali virtual machine. The Kali package krb5-user provides the required tools of kinit, klist and kdestroy used to request, view, and destroy Kerberos ticket granting tickets (TGT). When krb5-user package is installed via native Linux package manager of APT, it will install all other prerequisite packages too. The Kerberos configuration file is stored in /etc/krb5.conf. Before a Kerberos TGT can be requested, I must first populate this file with the HTB domain controller and realm information. Please note the following **important details** as this config file is strict about section formatting and capitalization of AD domain objects. Please see Figure 2 below for a example of a properly confgured and formatted krbt5.conf configuration file.
 
 * All REALM NAMES must be CAPITALIZED
 * All domain names must be in lowercase
 * Ensure each section - libdefaults, realms, and domain_realm has matching opening and closing braces at the matching level. Key to value pairs must be on a single line to parse correctly.
 
-###
+![Correct krbt5.conf file](/Pen-testing-blog/assets/images/Rebound/Correct_krb5_file.png "Figure 2 - Correctly set up krbt5.conf file")
+
+### Syncing the local VM time against the HTB machine domain controller
+
+Kerberos is very strict about the time difference between the machine where the authentication request is coming from and the machine one is authenticating to in order to safeguard against replay attacks. A time skew of > 5 minutes will result in the TGT ticket being rejected. As a result I need to sync my Kali VM clock against that of the Rebound HTB machine by first turning off all mechanism that force sync the VM time with my physical host machine time: Hypervisor syncing, guest editions syncing, and Kali VM syncing. Please see **Figure 3** for what the output of the **timedatectl status** command output should look like when time sync between Kali VM and host machine has been disabled. Note the highlighted lines as evidence of time sync disabling.
+
+![Kali VM time sync disabled](/Pen-testing-blog/assets/images/Rebound/Sync_time_Kali_rebound.png "Figure 3 - Kali VM time sync disabled")
+
+Afterwards, I need to manually sync my Kali VM clock against that of the Rebound machine domain controller (DC) by running command **NTPDate (Dynamic IP address of Rebound machine from HTB)** Please see **Figure 4** below for clock syncing success.
+
+![Kali clock synced to Rebound DC](/Pen-testing-blog/assets/images/Rebound/Kali_clock_sync_Rebound.png "Figure 4 - Kali clock syned to Rebound DC")
 
 ## Step 1 - Enumeration
 
