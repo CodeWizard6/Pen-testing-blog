@@ -196,4 +196,3 @@ I suspect Ldap_monitor to be a service account based on the naming convention an
 ### AD domain enumeration with Bloodhound
 
 As I can see no other obvious method for further domain compromise, I enumerate the domain objects using the Bloodhound tool. The first step is to ingest AD domain objects with a AD ingestor tool like Rusthound. Syntax is as follows in **Figure 17** below along with successful ingestion output in a zip file
-Please see
